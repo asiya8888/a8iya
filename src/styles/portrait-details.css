@@ -1,0 +1,40 @@
+.hair {
+  background: #211513;
+  border-radius: 50% 50% 26% 26%;
+  height: 58px;
+  left: -7px;
+  position: absolute;
+  top: -18px;
+  width: 142px;
+}
+
+.hair--long {
+  height: 132px;
+  top: -15px;
+}
+
+.hair--hood {
+  background: transparent;
+  border: 22px solid #272f3b;
+  border-bottom: 0;
+  border-radius: 44% 44% 18% 18%;
+  height: 186px;
+  left: -26px;
+  top: -20px;
+  width: 180px;
+}
+
+.hair--messy {
+  clip-path: polygon(0 18%, 12% 0, 28% 15%, 42% 2%, 58% 18%, 76% 0, 100% 20%, 90% 55%, 8% 58%);
+}
+
+.eye::after {
+  background: #e9eef4;
+  border-radius: 50%;
+  content: "";
+  height: 3px;
+  position: absolute;
+  right: 3px;
+  top: 2px;
+  width: 3px;
+}

@@ -1,0 +1,58 @@
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.form input {
+  background: #080c12;
+  border: 1px solid #344257;
+  color: #d6dce4;
+  padding: 13px 14px;
+  width: 100%;
+}
+
+.form input:focus {
+  border-color: #8d101b;
+  outline: 2px solid #8d101b55;
+}
+
+.form button,
+.google-button,
+.ghost {
+  background: #8d101b;
+  color: #edf2f7;
+  font-weight: 800;
+  padding: 13px 14px;
+  text-transform: uppercase;
+}
+
+.auth-divider {
+  align-items: center;
+  color: #8390a3;
+  display: flex;
+  font-size: 0.75rem;
+  gap: 10px;
+  margin: 16px 0;
+  text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  background: #344257;
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.google-button {
+  background: #d6dce4;
+  color: #080c12;
+  width: 100%;
+}
+
+.ghost {
+  background: transparent;
+  color: #8390a3;
+  margin-top: 14px;
+  padding: 0;
+}

@@ -1,0 +1,64 @@
+.visitor-card {
+  animation: fadeIn 0.55s ease both;
+  background: linear-gradient(180deg, #111925, #080605);
+  border: 1px solid #2d3a4c;
+  box-shadow: 0 22px 70px #000, inset 0 0 32px #7a101b18;
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+}
+
+.visitor-copy { display: grid; gap: 10px; }
+.visitor-copy h2 { font-size: 2rem; }
+.quote { color: #c4ced8; line-height: 1.5; }
+.event-text { color: #b95a47; font-size: 0.92rem; line-height: 1.45; }
+.empty-porch {
+  align-items: center;
+  background: #080c12;
+  border: 1px solid #263241;
+  color: #8390a3;
+  display: flex;
+  height: 300px;
+  justify-content: center;
+}
+
+.interaction-log {
+  background: #080c12;
+  border: 1px solid #263241;
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+}
+
+.interaction-log p {
+  color: #aeb9c5;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.interaction-log .outcome-text { color: #b95a47; }
+.choices {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.choices button {
+  background: #8d101b;
+  color: #edf2f7;
+  font-weight: 800;
+  padding: 14px 16px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.choices button:last-child {
+  background: #1b2533;
+  color: #d6dce4;
+}
+
+@media (max-width: 760px) {
+  .choices { grid-template-columns: 1fr; }
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } }

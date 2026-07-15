@@ -1,0 +1,125 @@
+.jumpscare, .end-screen {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  text-align: center;
+  z-index: 5;
+}
+
+.jumpscare {
+  animation: scareZoom 0.3s cubic-bezier(.02, 1, .1, 1) both, flash 0.045s steps(2) infinite;
+  background:
+    radial-gradient(circle at 50% 38%, #d9dde2 0 9%, #06070a 10% 15%, transparent 16%),
+    radial-gradient(circle at 41% 33%, #d2001b 0 3%, #020203 4% 9%, transparent 10%),
+    radial-gradient(circle at 59% 33%, #d2001b 0 3%, #020203 4% 9%, transparent 10%),
+    radial-gradient(ellipse at 50% 65%, #2a0007 0 13%, transparent 14%),
+    linear-gradient(90deg, #0e2b4a44, transparent 36%, #8d101b44),
+    repeating-linear-gradient(90deg, transparent 0 12px, #b800161a 13px 16px),
+    #050000;
+  color: transparent;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.jumpscare::before,
+.jumpscare::after {
+  content: "";
+  position: absolute;
+}
+
+.jumpscare::before {
+  animation: glitchSlice 0.11s steps(2) infinite;
+  background:
+    repeating-linear-gradient(0deg, #fff2 0 2px, transparent 2px 8px),
+    linear-gradient(90deg, #1d5f9e66, transparent 42%, #c4001866);
+  inset: 0;
+}
+
+.jumpscare::after {
+  background:
+    radial-gradient(circle at 43% 33%, #fff 0 1%, transparent 2%),
+    radial-gradient(circle at 57% 33%, #fff 0 1%, transparent 2%),
+    #fff;
+  inset: 0;
+  mix-blend-mode: difference;
+  opacity: 0.16;
+}
+
+.end-screen {
+  background:
+    radial-gradient(circle at 50% 100%, #84101b38, transparent 38%),
+    linear-gradient(#05080df7, #010203fa);
+  padding: 24px;
+}
+
+.end-screen > div {
+  background: linear-gradient(180deg, #101722, #05070a);
+  border: 1px solid #2d3a4c;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #7a101b22;
+  max-width: 520px;
+  padding: 32px;
+}
+
+.end-screen--menu > div {
+  animation: menuDrift 5s ease-in-out infinite;
+  background:
+    linear-gradient(180deg, #07111ecc, #020306f2),
+    repeating-linear-gradient(0deg, #b8c8d80a 0 1px, transparent 1px 12px);
+  border: 1px solid #344257;
+  backdrop-filter: blur(2px);
+  max-width: 620px;
+}
+
+.end-screen--menu h2 {
+  animation: titleFlicker 3.2s steps(2) infinite;
+  color: #e8edf2;
+  text-shadow: 0 0 18px #ffffff33, 3px 0 #7a101b88, -3px 0 #1d3d5c88;
+}
+
+.end-screen h2 {
+  font-size: clamp(2.8rem, 9vw, 5.8rem);
+  line-height: 0.92;
+  margin: 12px 0;
+}
+
+.end-screen p {
+  color: #cfc3b4;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.end-screen button {
+  background: #8d101b;
+  color: #edf2f7;
+  font-weight: 800;
+  padding: 14px 16px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.end-screen--danger h2 { color: #ff3d28; }
+
+@keyframes scareZoom {
+  from { filter: blur(14px) contrast(2.8); transform: scale(0.62) rotate(-4deg); }
+  38% { transform: translate(28px, -18px) scale(1.58) rotate(4deg); }
+  to { filter: blur(0) contrast(1.9); transform: scale(1.22); }
+}
+
+@keyframes flash {
+  50% { filter: invert(1) contrast(3); transform: translate(-24px, 14px) scale(1.28) skewX(4deg); }
+}
+
+@keyframes menuDrift {
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes titleFlicker {
+  8%, 11%, 63% { opacity: 0.72; transform: translateX(1px); }
+  9%, 64% { opacity: 1; transform: translateX(-1px); }
+}
+
+@keyframes glitchSlice {
+  50% { clip-path: inset(18% 0 34% 0); transform: translateX(22px); }
+}

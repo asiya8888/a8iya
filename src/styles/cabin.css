@@ -1,0 +1,116 @@
+.cabin {
+  background:
+    radial-gradient(circle at 44% 82%, #b56b3f55, transparent 35%),
+    linear-gradient(90deg, #1c120c, #31343a 42%, #130c08);
+  border: 1px solid #263241;
+  box-shadow: inset 0 0 38px #000, 0 24px 70px #0008;
+  min-height: 620px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cabin::before {
+  animation: candle 2.4s ease-in-out infinite;
+  background: radial-gradient(circle at 50% 100%, #c57a4594, transparent 64%);
+  content: "";
+  inset: 38% 0 0;
+  position: absolute;
+}
+
+.cabin::after {
+  animation: shadows 5s ease-in-out infinite;
+  background: linear-gradient(75deg, transparent 25%, #0004 48%, transparent 70%);
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.window {
+  background:
+    linear-gradient(#07111ecc, #142642cc),
+    radial-gradient(circle at 72% 26%, #b8c8d8 0 18px, transparent 20px);
+  border: 10px solid #0a0d12;
+  box-shadow: inset 0 0 35px #000, 0 0 18px #6a8fb822;
+  height: 224px;
+  left: 7%;
+  overflow: hidden;
+  position: absolute;
+  top: 38px;
+  width: 36%;
+  z-index: 1;
+}
+
+.window::before,
+.window::after {
+  background: #05070a;
+  content: "";
+  position: absolute;
+  z-index: 2;
+}
+
+.window::before { height: 100%; left: 50%; top: 0; width: 8px; }
+.window::after { height: 8px; left: 0; top: 50%; width: 100%; }
+.moon { display: none; }
+
+.snowflake {
+  animation: snow linear infinite;
+  background: #f5fbff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff8;
+  height: 5px;
+  position: absolute;
+  top: -8px;
+  width: 5px;
+}
+
+.door {
+  background:
+    linear-gradient(90deg, #1b0f0a, #4a2b1b 47%, #120907),
+    repeating-linear-gradient(90deg, transparent 0 28px, #0003 29px 31px);
+  border: 8px solid #100806;
+  bottom: 0;
+  box-shadow: inset 0 0 40px #000;
+  height: 430px;
+  left: 70%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: min(320px, 44%);
+  z-index: 1;
+}
+
+.door-panel {
+  border: 2px solid #72452a;
+  box-shadow: inset 0 0 18px #0007;
+  height: 140px;
+  margin: 45px auto 0;
+  width: 70%;
+}
+
+.knob {
+  background: radial-gradient(circle, #a98b67, #3c2518);
+  border-radius: 50%;
+  height: 18px;
+  position: absolute;
+  right: 42px;
+  top: 210px;
+  width: 18px;
+}
+
+.floor-light {
+  animation: candle 1.7s ease-in-out infinite;
+  background: radial-gradient(ellipse, #c57a4575, transparent 70%);
+  bottom: -80px;
+  height: 230px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+@keyframes snow { to { transform: translate(-28px, 245px); } }
+@keyframes candle { 50% { opacity: 0.72; transform: scale(1.03); } }
+@keyframes shadows { 50% { transform: translateX(-8%); opacity: 0.5; } }
+
+@media (max-width: 760px) {
+  .cabin { min-height: 430px; }
+  .door { height: 300px; }
+}

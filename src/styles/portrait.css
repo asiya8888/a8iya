@@ -1,0 +1,124 @@
+.portrait {
+  background:
+    radial-gradient(circle at 52% 18%, #a9bed022, transparent 28%),
+    linear-gradient(180deg, #121a26, #05070b);
+  border: 1px solid #263241;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+.portrait::after {
+  background: linear-gradient(90deg, #0008, transparent 28%, transparent 62%, #000a);
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.shoulders {
+  background: #2e3743;
+  border-radius: 45% 45% 0 0;
+  bottom: -38px;
+  height: 116px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 230px;
+}
+
+.portrait--scarf .shoulders { background: linear-gradient(90deg, #202734, #65111b 52%, #252c36); }
+.portrait--coat .shoulders { background: #3a2216; }
+
+.face {
+  background: #c6ad97;
+  border-radius: 44% 44% 48% 48%;
+  box-shadow: inset -22px 12px 28px #2b171633, inset 10px -20px 26px #fff2;
+  height: 178px;
+  left: 50%;
+  position: absolute;
+  top: 48px;
+  transform: translateX(-50%);
+  width: 128px;
+  z-index: 1;
+}
+
+.face--pale { background: #c7b9ad; }
+.face--warm { background: #b88a69; }
+.face--frozen { background: #b8c8cd; }
+.face--older { box-shadow: inset -24px 13px 28px #2b171642, inset 0 -16px 22px #5a474455; }
+.face-shadow { background: #02020255; inset: 0 0 0 54%; position: absolute; }
+
+.eye, .brow, .nose, .scar, .mouth, .breath { position: absolute; }
+.eye {
+  background: #151719;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #e8d5c6;
+  height: 10px;
+  top: 70px;
+  width: 15px;
+}
+
+.eye--0 { left: 34px; }
+.eye--1 { right: 34px; }
+.face--black .eye { background: #050505; box-shadow: 0 0 12px #000; height: 15px; }
+.face--wide .eye { border-radius: 45%; width: 25px; }
+.face--three .eye { background: #d7bf67; box-shadow: 0 0 8px #d7bf67; }
+.face--three .eye--0 { left: 24px; }
+.face--three .eye--1 { left: 56px; right: auto; top: 62px; }
+.face--three .eye--2 { right: 24px; }
+
+.brow {
+  background: #2b1c18;
+  height: 4px;
+  top: 52px;
+  width: 28px;
+}
+
+.brow--left { left: 26px; }
+.brow--right { right: 26px; }
+.brow--worried.brow--left { transform: rotate(12deg); }
+.brow--worried.brow--right { transform: rotate(-12deg); }
+.brow--low { top: 58px; }
+
+.nose {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 34px solid #8d6f61;
+  left: 56px;
+  top: 84px;
+}
+
+.scar {
+  background: #6b251f;
+  height: 68px;
+  right: 36px;
+  top: 54px;
+  transform: rotate(18deg);
+  width: 3px;
+}
+
+.mouth {
+  background: #3a1715;
+  border-radius: 0 0 50% 50%;
+  bottom: 34px;
+  height: 8px;
+  left: 43px;
+  width: 42px;
+}
+
+.mouth--tense { height: 4px; }
+.mouth--too-wide { height: 13px; left: 24px; width: 80px; }
+.breath {
+  animation: breathe 2.8s ease-in-out infinite;
+  background: #dbe8f055;
+  border-radius: 50%;
+  height: 36px;
+  left: 58%;
+  top: 174px;
+  width: 58px;
+  z-index: 2;
+}
+
+@keyframes breathe {
+  50% { opacity: 0.2; transform: translate(18px, -12px) scale(1.5); }
+}
