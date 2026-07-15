@@ -42,9 +42,9 @@ export function playKnock() {
 }
 
 export function playJumpscare() {
-  beep(420, 0, 0.16, 0.85);
-  beep(68, 0.04, 0.48, 0.9);
-  beep(145, 0.1, 0.22, 0.65);
+  [0, 0.04, 0.08, 0.12].forEach((delay) => beep(520 + delay * 1800, delay, 0.11, 0.9));
+  beep(58, 0, 0.58, 1);
+  beep(180, 0.16, 0.32, 0.85);
 }
 
 function playAmbientSting() {

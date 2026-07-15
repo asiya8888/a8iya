@@ -72,7 +72,12 @@ export function GameScreen({ onSignOut }: GameScreenProps) {
           />
         </div>
       </div>
-      {game.status === 'jumpscare' && <div className="jumpscare" aria-label="Mimic jumpscare" />}
+      {game.status === 'jumpscare' && (
+        <div className="jumpscare" aria-label="Mimic jumpscare">
+          <span>You Lose</span>
+          <strong>Game Over</strong>
+        </div>
+      )}
       {game.status === 'lost' && (
         <EndScreen danger title="Game Over" text="The cabin goes quiet before sunrise." onRestart={game.restart} />
       )}
