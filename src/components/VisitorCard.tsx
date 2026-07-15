@@ -7,6 +7,8 @@ type VisitorCardProps = {
   entries: string[];
   outcome?: string;
   disabled: boolean;
+  canAsk: boolean;
+  canLook: boolean;
   onAsk: () => void;
   onLook: () => void;
   onAllow: () => void;
@@ -18,6 +20,8 @@ export function VisitorCard({
   entries,
   outcome,
   disabled,
+  canAsk,
+  canLook,
   onAsk,
   onLook,
   onAllow,
@@ -38,10 +42,10 @@ export function VisitorCard({
       </div>
       <InteractionLog entries={entries} outcome={outcome} />
       <div className="choices">
-        <button disabled={disabled || visitor.answers.length === 0} onClick={onAsk}>
+        <button disabled={disabled || !canAsk} onClick={onAsk}>
           Ask Questions
         </button>
-        <button disabled={disabled || visitor.inspections.length === 0} onClick={onLook}>
+        <button disabled={disabled || !canLook} onClick={onLook}>
           Look Closer
         </button>
         <button disabled={disabled} onClick={onAllow}>

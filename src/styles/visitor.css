@@ -8,6 +8,11 @@
   padding: 18px;
 }
 
+.quiet-card {
+  align-content: center;
+  min-height: 420px;
+}
+
 .visitor-copy { display: grid; gap: 10px; }
 .visitor-copy h2 { font-size: 2rem; }
 .quote { color: #c4ced8; line-height: 1.5; }

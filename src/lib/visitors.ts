@@ -1,3 +1,5 @@
+import { makeDialogueProfile } from './dialogueProfiles';
+
 export type VisitorKind = 'human' | 'skinwalker' | 'empty';
 export type MoralOutcome = 'peaceful' | 'steal' | 'injure';
 
@@ -48,41 +50,6 @@ const specialEvents = [
   'A whisper comes from behind you, but the visitor keeps staring.',
 ];
 
-const makeDialogue = (kind: VisitorKind, night: number) => {
-  const humanLines = [
-    'My truck slid off the pass.',
-    'I lost the trail after sunset.',
-    'The storm came in too fast.',
-    'Please, I only need to warm my hands.',
-    'I saw your light from the trees.',
-    'We have been walking for hours.',
-  ];
-  const obviousWalker = ['I enjoy human food.', 'I do not feel cold.', 'Invite me inside and sleep.'];
-  const subtleWalker = [
-    'My name is Michael. I think.',
-    'The cold is... unpleasant.',
-    'We followed the warm square in your wall.',
-    'Please hurry. We are tired.',
-  ];
-  const pool = kind === 'human' ? humanLines : night > 1 ? subtleWalker : obviousWalker.concat(subtleWalker);
-  return [pick(pool), pick(pool), ...(Math.random() > 0.55 ? [pick(pool)] : [])];
-};
-
-const makeAnswers = (kind: VisitorKind, night: number) => {
-  if (kind === 'human') {
-    return [
-      "I'm twenty-six. I got lost while hiking.",
-      "Please hurry. I'm freezing.",
-      "I've been walking for hours.",
-      'I came from the north trail, near the old radio tower.',
-      "I'm alone. I lost my group when the wind picked up.",
-    ];
-  }
-  const strange = ['Outside?', 'My name is... Michael.', 'I am cold.', 'I came from where people come from.'];
-  const clever = ['I got turned around near the ridge.', "I'm thirty. Maybe thirty-one.", 'The snow covered my tracks.'];
-  return night > 2 ? clever.concat(strange.slice(0, 2)) : strange.concat(clever.slice(0, 1));
-};
-
 const makeInspections = (kind: VisitorKind, subtle: boolean) => {
   if (kind === 'human') {
     return [
@@ -127,6 +94,8 @@ export const makeVisitor = (id: number, night: number): Visitor => {
     return { id, kind, name: 'The Door', dialogue: ['The porch is empty.'], answers: [], inspections: [], groupSize, eventText, outcome: 'peaceful' };
   }
 
+  const profile = makeDialogueProfile(kind, night);
+
   return {
     id,
     kind,
@@ -134,8 +103,8 @@ export const makeVisitor = (id: number, night: number): Visitor => {
     groupSize,
     eventText,
     outcome,
-    dialogue: makeDialogue(kind, night),
-    answers: makeAnswers(kind, night),
+    dialogue: profile.dialogue,
+    answers: profile.answers,
     inspections: makeInspections(kind, night > 2),
     face: makeFace(kind, night),
   };

@@ -2,6 +2,7 @@ import { CabinScene } from './CabinScene';
 import { DiaryFragment } from './DiaryFragment';
 import { EndScreen } from './EndScreen';
 import { GameHud } from './GameHud';
+import { QuietMoment } from './QuietMoment';
 import { VisitorCard } from './VisitorCard';
 import { useCabinGame } from '../lib/useCabinGame';
 import { snowStyle } from '../lib/snow';
@@ -60,16 +61,22 @@ export function GameScreen({ onSignOut }: GameScreenProps) {
         <p className="subtitle">{game.subtitle}</p>
         <div className="game-layout">
           <CabinScene />
-          <VisitorCard
-            disabled={choiceLocked}
-            visitor={game.visitor}
-            entries={game.entries}
-            outcome={game.outcome}
-            onAsk={game.askQuestion}
-            onLook={game.lookCloser}
-            onAllow={() => game.makeChoice('allow')}
-            onRefuse={() => game.makeChoice('refuse')}
-          />
+          {game.status === 'waiting' ? (
+            <QuietMoment outcome={game.outcome} />
+          ) : (
+            <VisitorCard
+              disabled={choiceLocked}
+              visitor={game.visitor}
+              entries={game.entries}
+              outcome={game.outcome}
+              canAsk={game.canAsk}
+              canLook={game.canLook}
+              onAsk={game.askQuestion}
+              onLook={game.lookCloser}
+              onAllow={() => game.makeChoice('allow')}
+              onRefuse={() => game.makeChoice('refuse')}
+            />
+          )}
         </div>
       </div>
       {game.status === 'jumpscare' && (
@@ -82,10 +89,10 @@ export function GameScreen({ onSignOut }: GameScreenProps) {
       )}
       {game.status === 'won' && (
         <EndScreen
-          title={`Night ${game.night} Survived`}
-          text="Ten knocks passed. The next night will be harder."
-          actionLabel="Next Night"
-          onRestart={game.nextNight}
+          title={game.finishedAllNights ? 'You Survived Whiteout' : `Night ${game.night} Survived`}
+          text={game.finishedAllNights ? 'Five nights passed. The diary was enough, for now.' : 'Ten knocks passed. The next night will be harder.'}
+          actionLabel={game.finishedAllNights ? 'Play Again' : 'Next Night'}
+          onRestart={game.finishedAllNights ? game.restart : game.nextNight}
         />
       )}
     </main>
