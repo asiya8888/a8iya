@@ -1,9 +1,10 @@
 .menu-cabin {
   background:
-    linear-gradient(145deg, transparent 0 34%, #100906 35% 52%, transparent 53%),
-    linear-gradient(215deg, transparent 0 34%, #160d08 35% 52%, transparent 53%),
-    linear-gradient(#1b100b, #0b0604);
-  border-bottom: 16px solid #06080c;
+    radial-gradient(circle at 30% 67%, #d19a5a 0 3%, transparent 4%),
+    linear-gradient(145deg, transparent 0 34%, #1d120b 35% 52%, transparent 53%),
+    linear-gradient(215deg, transparent 0 34%, #24170e 35% 52%, transparent 53%),
+    linear-gradient(#2a1b12, #0b0604);
+  border-bottom: 16px solid #090806;
   bottom: 5vh;
   box-shadow: 0 30px 70px #000, inset 0 -70px 90px #0009;
   height: min(48vh, 420px);
@@ -16,7 +17,7 @@
 }
 
 .menu-cabin::before {
-  background: linear-gradient(180deg, transparent, #ffffff28);
+  background: linear-gradient(180deg, transparent, #ffffff12);
   bottom: -16px;
   content: "";
   height: 48px;

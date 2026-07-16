@@ -56,33 +56,31 @@
 
 .end-screen {
   background:
-    linear-gradient(135deg, #05080df7, #160306f2 48%, #010203fa),
-    repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 8px);
+    linear-gradient(135deg, #050607f7, #15100bf2 52%, #020304fa),
+    repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 8px);
   padding: 24px;
 }
 
 .end-screen > div {
-  background: linear-gradient(180deg, #101722, #05070a);
-  border: 1px solid #2d3a4c;
-  box-shadow: 0 24px 90px #000, inset 0 0 38px #7a101b22;
+  background: linear-gradient(180deg, #15100c, #060504);
+  border: 1px solid #4b3a2b;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #c58b4f14;
   max-width: 520px;
   padding: 32px;
 }
 
 .end-screen--menu > div {
-  animation: menuDrift 5s ease-in-out infinite;
   background:
-    linear-gradient(180deg, #07111ecc, #020306f2),
-    repeating-linear-gradient(0deg, #b8c8d80a 0 1px, transparent 1px 12px);
-  border: 1px solid #344257;
+    linear-gradient(180deg, #15100ccc, #050403f2),
+    repeating-linear-gradient(0deg, #c7b89f08 0 1px, transparent 1px 12px);
+  border: 1px solid #4b3a2b;
   backdrop-filter: blur(2px);
   max-width: 680px;
 }
 
 .end-screen--menu h2 {
-  animation: titleFlicker 3.2s steps(2) infinite;
-  color: #e8edf2;
-  text-shadow: 0 0 18px #ffffff33, 3px 0 #7a101b88, -3px 0 #1d3d5c88;
+  color: #e7ddd0;
+  text-shadow: 0 0 18px #c58b4f2f;
 }
 
 .end-screen h2 {
@@ -98,15 +96,15 @@
 }
 
 .end-screen button {
-  background: #8d101b;
-  color: #edf2f7;
+  background: #6d4b31;
+  color: #f2e6d4;
   font-weight: 800;
   padding: 14px 16px;
   text-transform: uppercase;
   width: 100%;
 }
 
-.end-screen--danger h2 { color: #ff3d28; }
+.end-screen--danger h2 { color: #d8c4a8; }
 
 @keyframes scareZoom {
   from { filter: blur(10px) contrast(2.4); transform: scale(0.92); }

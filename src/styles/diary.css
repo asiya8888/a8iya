@@ -1,6 +1,6 @@
 .diary-fragment {
-  background: #0a0d12;
-  border: 1px solid #344257;
+  background: #0b0806;
+  border: 1px solid #4b3a2b;
   box-shadow: inset 0 0 24px #0008;
   margin: 0 0 20px;
   padding: 16px;
@@ -8,13 +8,13 @@
 }
 
 .diary-fragment p {
-  color: #b8c2cc;
+  color: #cfc3b4;
   font-size: 0.92rem;
   margin-bottom: 12px;
 }
 
 .diary-fragment ul {
-  color: #d8dee6;
+  color: #d4c6b6;
   display: grid;
   gap: 5px;
   margin: 0 0 12px 18px;
@@ -22,10 +22,10 @@
 }
 
 .diary-fragment li { font-size: 0.88rem; }
-.diary-fragment strong { color: #eef3f8; }
+.diary-fragment strong { color: #efe0c8; }
 
 .diary-fragment .diary-warning {
-  color: #c85b5b;
+  color: #c49a67;
   font-family: "Special Elite", Georgia, serif;
   margin: 0;
 }

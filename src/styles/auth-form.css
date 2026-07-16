@@ -4,23 +4,23 @@
 }
 
 .form input {
-  background: #080c12;
-  border: 1px solid #344257;
-  color: #d6dce4;
+  background: #090806;
+  border: 1px solid #4b3a2b;
+  color: #e5d7c5;
   padding: 13px 14px;
   width: 100%;
 }
 
 .form input:focus {
-  border-color: #8d101b;
-  outline: 2px solid #8d101b55;
+  border-color: #b28a5f;
+  outline: 2px solid #b28a5f45;
 }
 
 .form button,
 .google-button,
 .ghost {
-  background: #8d101b;
-  color: #edf2f7;
+  background: #6d4b31;
+  color: #f2e6d4;
   font-weight: 800;
   padding: 13px 14px;
   text-transform: uppercase;
@@ -28,7 +28,7 @@
 
 .auth-divider {
   align-items: center;
-  color: #8390a3;
+  color: #9e917f;
   display: flex;
   font-size: 0.75rem;
   gap: 10px;
@@ -38,21 +38,21 @@
 
 .auth-divider::before,
 .auth-divider::after {
-  background: #344257;
+  background: #4b3a2b;
   content: "";
   flex: 1;
   height: 1px;
 }
 
 .google-button {
-  background: #d6dce4;
-  color: #080c12;
+  background: #d9c9b6;
+  color: #0b0806;
   width: 100%;
 }
 
 .ghost {
   background: transparent;
-  color: #8390a3;
+  color: #a99a87;
   margin-top: 14px;
   padding: 0;
 }

@@ -37,8 +37,8 @@ export function GameScreen({ onSignOut }: GameScreenProps) {
           menu
           label="WHITEOUT"
           title="WHITEOUT"
-          text="Lost travelers knock at your cabin. Some are only pretending to be human."
-          actionLabel="Start Game"
+          text="The cabin is warm. The road is gone. Someone may knock before dawn."
+          actionLabel="Begin Night"
           onRestart={game.startNight}
         >
           <DiaryFragment />

@@ -1,54 +1,17 @@
 .login-shell {
   align-items: center;
   background:
-    linear-gradient(90deg, #020306 0 10%, transparent 34%, #020306d9 100%),
-    linear-gradient(180deg, #07101b 0%, #102035 46%, #05070b 100%);
+    radial-gradient(circle at 22% 78%, #c58b4f1f, transparent 18%),
+    linear-gradient(90deg, #030405 0 12%, transparent 42%, #030405d9 100%),
+    linear-gradient(180deg, #0b1420 0%, #162335 48%, #050607 100%);
   display: grid;
   gap: 26px;
   grid-template-columns: minmax(320px, 1fr) minmax(280px, 380px);
 }
 
-.login-cabin {
-  background:
-    linear-gradient(90deg, #0000 0 9%, #080b0f 9% 10%, #0000 10% 18%, #080b0f 18% 19%, #0000 19%),
-    radial-gradient(circle at 24% 72%, #d9a35f 0 2%, transparent 2.8%),
-    linear-gradient(145deg, transparent 0 36%, #11100f 36% 52%, transparent 52%),
-    linear-gradient(215deg, transparent 0 36%, #15120f 36% 52%, transparent 52%),
-    linear-gradient(#1a1918, #070707);
-  border-bottom: 16px solid #050608;
-  bottom: 0;
-  box-shadow: 0 34px 90px #000, inset 0 -90px 90px #000b;
-  height: min(54vh, 430px);
-  left: 0;
-  opacity: 0.86;
-  position: fixed;
-  width: min(760px, 82vw);
-  z-index: 0;
-}
-
-.login-cabin::before {
-  background:
-    linear-gradient(90deg, #05070a 0 3px, transparent 3px 100%),
-    linear-gradient(170deg, transparent 0 42%, #05070a 43% 45%, transparent 46%);
-  bottom: 35%;
-  content: "";
-  height: 210px;
-  left: 72%;
-  position: absolute;
-  width: 230px;
-}
-
-.login-cabin::after {
-  background:
-    linear-gradient(180deg, transparent 0 68%, #0007 100%),
-    repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 4px);
-  content: "";
-  inset: 0;
-  position: absolute;
-}
-
 .login-copy,
-.auth-card {
+.auth-card,
+.menu-panel {
   position: relative;
   z-index: 1;
 }
@@ -62,27 +25,26 @@
 }
 
 .login-copy h1 {
-  animation: titleFlicker 3.2s steps(2) infinite;
-  color: #f0183d;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: clamp(4.4rem, 12vw, 9.4rem);
-  font-weight: 900;
-  line-height: 0.78;
+  color: #e7ddd0;
+  font-size: clamp(4rem, 11vw, 8.6rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 0.86;
   margin: 0 0 10px;
-  text-shadow: 0 0 16px #f0183d44, 3px 0 #08192f, -2px 0 #ffe86b66;
+  text-shadow: 0 0 18px #c58b4f2f, 0 8px 28px #000;
 }
 
 .login-copy p:last-child {
-  color: #e1d05f;
-  font-size: clamp(0.78rem, 1.2vw, 1rem);
-  font-weight: 800;
+  color: #bca98f;
+  font-size: clamp(0.82rem, 1.15vw, 1rem);
+  font-weight: 600;
   letter-spacing: 0.04em;
   max-width: 430px;
   text-transform: uppercase;
 }
 
 .title-menu {
-  border-left: 1px solid #d6dce433;
+  border-left: 1px solid #c7b89f30;
   display: grid;
   gap: 10px;
   min-width: 230px;
@@ -91,8 +53,10 @@
 
 .title-menu button {
   background: transparent;
-  color: #d9e1e8;
-  font-weight: 800;
+  color: #d9cdbd;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
   letter-spacing: 0.04em;
   padding: 7px 0;
   text-align: left;
@@ -101,14 +65,15 @@
 
 .title-menu button:hover,
 .title-menu button:focus-visible {
-  color: #f0183d;
+  color: #f1d094;
   transform: translateX(5px);
 }
 
-.auth-card {
+.auth-card,
+.menu-panel {
   background: #05070bcc;
-  border: 1px solid #d6dce426;
-  box-shadow: 0 24px 90px #000, inset 0 0 38px #1d3d5c33;
+  border: 1px solid #c7b89f26;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #c58b4f14;
   padding: 28px;
 }
 
@@ -119,19 +84,14 @@
 
 .message,
 .loading-text {
-  color: #b81422;
+  color: #d2ad78;
   position: relative;
   z-index: 1;
 }
 
-.login-snow {
-  animation: loginSnow linear infinite;
-  background: #f1f6fb;
-  border-radius: 48% 62% 43% 58%;
-  clip-path: polygon(50% 0, 64% 34%, 100% 45%, 66% 61%, 56% 100%, 40% 66%, 0 55%, 36% 39%);
-  position: fixed;
-  top: -10px;
-  z-index: 2;
+.menu-panel {
+  color: #cfc3b4;
+  line-height: 1.6;
 }
 
 @media (max-width: 760px) {
@@ -142,10 +102,5 @@
     gap: 18px;
     transform: none;
   }
-  .login-cabin { left: -28vw; width: 135vw; }
-  .title-menu { border-left: 0; border-top: 1px solid #d6dce433; padding-top: 16px; }
-}
-
-@keyframes loginSnow {
-  to { transform: translate(var(--drift), 110vh) rotate(var(--spin)); }
+  .title-menu { border-left: 0; border-top: 1px solid #c7b89f30; padding-top: 16px; }
 }

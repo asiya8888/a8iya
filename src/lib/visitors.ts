@@ -51,9 +51,9 @@ const makeInspections = (kind: VisitorKind, subtle: boolean) => {
     return [
       'Their shoulders shake from the cold.',
       'Snow is melting on their sleeves.',
-      'You can see their breath cloud the air.',
+      Math.random() > 0.22 ? 'You can see their breath cloud the air.' : "Their breath is faint enough that you question it.",
       'Their voice trembles like they are trying not to cry.',
-      'Their hands look stiff and red from the cold.',
+      Math.random() > 0.5 ? 'Their hands look stiff and red from the cold.' : 'Their stare lingers because fear has made them slow to answer.',
     ];
   }
   const hard = [
@@ -70,21 +70,23 @@ const makeInspections = (kind: VisitorKind, subtle: boolean) => {
 };
 
 const makeFace = (kind: VisitorKind, night: number): FaceFeature => {
-  const subtle = kind === 'skinwalker' && night > 1;
+  const subtle = kind === 'skinwalker' && (night > 1 || Math.random() > 0.35);
+  const humanLooksWrong = kind === 'human' && Math.random() > 0.68;
+  const mimicLooksNormal = kind === 'skinwalker' && Math.random() < 0.45 + night * 0.08;
   return {
-    eyes: kind === 'human' || subtle ? pick(['normal', 'wide']) : pick(['wide', 'black', 'three']),
-    mouth: kind === 'human' || subtle ? pick(['normal', 'flat', 'tense']) : pick(['tense', 'too-wide']),
-    nose: kind === 'skinwalker' && !subtle && Math.random() > 0.55 ? 'missing' : 'normal',
+    eyes: mimicLooksNormal || kind === 'human' ? pick(['normal', 'wide']) : pick(['normal', 'wide', 'black']),
+    mouth: mimicLooksNormal || kind === 'human' ? pick(['normal', 'flat', 'tense']) : pick(['flat', 'tense', 'too-wide']),
+    nose: kind === 'skinwalker' && !subtle && Math.random() > 0.86 ? 'missing' : 'normal',
     hair: pick(['short', 'hood', 'messy', 'long']),
-    skin: kind === 'skinwalker' ? pick(['pale', 'frozen']) : pick(['pale', 'warm', 'frozen']),
+    skin: mimicLooksNormal ? pick(['warm', 'pale']) : pick(['pale', 'warm', 'frozen']),
     clothes: pick(['parka', 'scarf', 'coat']),
     age: pick(['young', 'adult', 'older']),
-    brows: kind === 'skinwalker' ? pick(['low', 'worried', 'soft']) : pick(['soft', 'worried']),
-    expression: kind === 'skinwalker' ? pick(['calm', 'strained', 'afraid']) : pick(['afraid', 'tired', 'strained']),
+    brows: kind === 'skinwalker' ? pick(['soft', 'worried', 'low']) : pick(['soft', 'worried', 'low']),
+    expression: kind === 'skinwalker' ? pick(['calm', 'strained', 'afraid', 'tired']) : pick(['afraid', 'tired', 'strained', 'calm']),
     lighting: pick(['left', 'right', 'low']),
-    scar: Math.random() > 0.72,
-    shadow: kind === 'skinwalker' ? Math.random() > 0.25 : Math.random() > 0.82,
-    breath: kind === 'human' || (subtle && Math.random() > 0.55),
+    scar: Math.random() > 0.72 || humanLooksWrong,
+    shadow: kind === 'skinwalker' ? Math.random() > 0.58 : humanLooksWrong,
+    breath: kind === 'human' ? Math.random() > 0.12 : mimicLooksNormal && Math.random() > 0.36,
   };
 };
 
