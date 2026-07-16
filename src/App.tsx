@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { Auth } from './components/Auth';
+import { Auth, type AuthMode } from './components/Auth';
 import { GameScreen } from './components/GameScreen';
 import { clearAuthCallbackUrl, readAuthErrorFromUrl } from './lib/auth';
 import { snowStyle } from './lib/snow';
@@ -10,6 +10,7 @@ function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError] = useState(readAuthErrorFromUrl);
+  const [authMode, setAuthMode] = useState<AuthMode>('signin');
   const loginSnow = Array.from({ length: 56 }, (_, index) => (
     <span className="login-snow" key={index} style={snowStyle(index)} />
   ));
@@ -48,11 +49,22 @@ function App() {
       <main className="login-shell">
         <div className="login-cabin" aria-hidden="true" />
         {loginSnow}
-        <section className="login-copy">
-          <h1>WHITEOUT</h1>
-          <p>Log in to begin the night inspection.</p>
+        <section className="login-copy" aria-label="Whiteout title menu">
+          <div>
+            <h1>WHITEOUT</h1>
+            <p>Mountain roads vanish. Some knocks should stay outside.</p>
+          </div>
+          <nav className="title-menu" aria-label="Main menu">
+            <button onClick={() => setAuthMode('signin')}>New Game</button>
+            <button onClick={() => setAuthMode('signin')}>Log In</button>
+            <button onClick={() => setAuthMode('signup')}>Don't have an account? Sign Up</button>
+          </nav>
         </section>
-        <Auth initialMessage={authError} />
+        <Auth
+          initialMessage={authError}
+          initialMode={authMode}
+          onModeChange={setAuthMode}
+        />
       </main>
     );
   }

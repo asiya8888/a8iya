@@ -1,17 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getOAuthRedirectUrl } from '../lib/auth';
 import { supabase } from '../lib/supabase';
 
+export type AuthMode = 'signin' | 'signup';
+
 type AuthProps = {
+  initialMode?: AuthMode;
   initialMessage?: string;
+  onModeChange?: (mode: AuthMode) => void;
 };
 
-export function Auth({ initialMessage = '' }: AuthProps) {
+export function Auth({ initialMode = 'signin', initialMessage = '', onModeChange }: AuthProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [mode, setMode] = useState<AuthMode>(initialMode);
   const [message, setMessage] = useState(initialMessage);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
+
+  function changeMode(nextMode: AuthMode) {
+    setMode(nextMode);
+    onModeChange?.(nextMode);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,9 +89,9 @@ export function Auth({ initialMessage = '' }: AuthProps) {
       {message && <p className="message">{message}</p>}
       <button
         className="ghost"
-        onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+        onClick={() => changeMode(mode === 'signin' ? 'signup' : 'signin')}
       >
-        {mode === 'signin' ? 'Need an account?' : 'Already have an account?'}
+        {mode === 'signin' ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
       </button>
     </section>
   );

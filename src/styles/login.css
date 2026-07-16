@@ -1,40 +1,49 @@
 .login-shell {
   align-items: center;
+  background:
+    linear-gradient(90deg, #020306 0 10%, transparent 34%, #020306d9 100%),
+    linear-gradient(180deg, #07101b 0%, #102035 46%, #05070b 100%);
   display: grid;
-  gap: 32px;
-  grid-template-columns: minmax(280px, 1fr) minmax(280px, 390px);
+  gap: 26px;
+  grid-template-columns: minmax(320px, 1fr) minmax(280px, 380px);
 }
 
 .login-cabin {
   background:
-    linear-gradient(145deg, transparent 0 34%, #120905 35% 52%, transparent 53%),
-    linear-gradient(215deg, transparent 0 34%, #1b0f09 35% 52%, transparent 53%),
-    linear-gradient(#21130d, #080504);
-  border-bottom: 14px solid #07090d;
-  bottom: 3vh;
-  box-shadow: 0 30px 80px #000, inset 0 -80px 90px #0009;
-  height: min(46vh, 380px);
-  left: 6vw;
-  opacity: 0.72;
+    linear-gradient(90deg, #0000 0 9%, #080b0f 9% 10%, #0000 10% 18%, #080b0f 18% 19%, #0000 19%),
+    radial-gradient(circle at 24% 72%, #d9a35f 0 2%, transparent 2.8%),
+    linear-gradient(145deg, transparent 0 36%, #11100f 36% 52%, transparent 52%),
+    linear-gradient(215deg, transparent 0 36%, #15120f 36% 52%, transparent 52%),
+    linear-gradient(#1a1918, #070707);
+  border-bottom: 16px solid #050608;
+  bottom: 0;
+  box-shadow: 0 34px 90px #000, inset 0 -90px 90px #000b;
+  height: min(54vh, 430px);
+  left: 0;
+  opacity: 0.86;
   position: fixed;
-  width: min(660px, 76vw);
+  width: min(760px, 82vw);
   z-index: 0;
 }
 
 .login-cabin::before {
-  background: linear-gradient(180deg, transparent, #ffffff20);
-  bottom: -14px;
+  background:
+    linear-gradient(90deg, #05070a 0 3px, transparent 3px 100%),
+    linear-gradient(170deg, transparent 0 42%, #05070a 43% 45%, transparent 46%);
+  bottom: 35%;
   content: "";
-  height: 48px;
-  left: -12vw;
+  height: 210px;
+  left: 72%;
   position: absolute;
-  width: 120vw;
+  width: 230px;
 }
 
 .login-cabin::after {
-  background: linear-gradient(180deg, transparent, #0007);
+  background:
+    linear-gradient(180deg, transparent 0 70%, #dce9f129 71%, #eef6ff45 100%),
+    repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 4px);
   content: "";
-  inset: 0;
+  inset: 0 -30vw -18px;
   position: absolute;
 }
 
@@ -45,32 +54,61 @@
 }
 
 .login-copy {
-  margin-left: 0;
-  max-width: 620px;
-  transform: translateX(18px);
+  align-items: center;
+  display: flex;
+  gap: 28px;
+  max-width: 900px;
+  transform: translate(3vw, -4vh);
 }
 
 .login-copy h1 {
   animation: titleFlicker 3.2s steps(2) infinite;
-  color: #e8edf2;
-  font-size: clamp(5rem, 13vw, 10rem);
-  line-height: 0.82;
-  margin: 0 0 18px;
-  text-shadow: 0 0 18px #ffffff33, 3px 0 #7a101b88, -3px 0 #1d3d5c88;
+  color: #f0183d;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: clamp(4.4rem, 12vw, 9.4rem);
+  font-weight: 900;
+  line-height: 0.78;
+  margin: 0 0 10px;
+  text-shadow: 0 0 16px #f0183d44, 3px 0 #08192f, -2px 0 #ffe86b66;
 }
 
 .login-copy p:last-child {
-  color: #8390a3;
-  font-size: 0.95rem;
+  color: #e1d05f;
+  font-size: clamp(0.78rem, 1.2vw, 1rem);
+  font-weight: 800;
   letter-spacing: 0.04em;
-  max-width: 330px;
+  max-width: 430px;
   text-transform: uppercase;
 }
 
+.title-menu {
+  border-left: 1px solid #d6dce433;
+  display: grid;
+  gap: 10px;
+  min-width: 230px;
+  padding-left: 22px;
+}
+
+.title-menu button {
+  background: transparent;
+  color: #d9e1e8;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 7px 0;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.title-menu button:hover,
+.title-menu button:focus-visible {
+  color: #f0183d;
+  transform: translateX(5px);
+}
+
 .auth-card {
-  background: linear-gradient(180deg, #101722, #05070a);
-  border: 1px solid #2d3a4c;
-  box-shadow: 0 24px 90px #000, inset 0 0 38px #7a101b22;
+  background: #05070bcc;
+  border: 1px solid #d6dce426;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #1d3d5c33;
   padding: 28px;
 }
 
@@ -93,13 +131,19 @@
   clip-path: polygon(50% 0, 64% 34%, 100% 45%, 66% 61%, 56% 100%, 40% 66%, 0 55%, 36% 39%);
   position: fixed;
   top: -10px;
-  z-index: 1;
+  z-index: 2;
 }
 
 @media (max-width: 760px) {
   .login-shell { grid-template-columns: 1fr; }
-  .login-copy { margin: 0; transform: none; }
-  .login-cabin { left: -20vw; width: 120vw; }
+  .login-copy {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    transform: none;
+  }
+  .login-cabin { left: -28vw; width: 135vw; }
+  .title-menu { border-left: 0; border-top: 1px solid #d6dce433; padding-top: 16px; }
 }
 
 @keyframes loginSnow {
