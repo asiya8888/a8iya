@@ -1,12 +1,12 @@
 .login-cabin {
   background:
-    linear-gradient(145deg, transparent 0 36%, #1b130d 36% 52%, transparent 52%),
-    linear-gradient(215deg, transparent 0 36%, #24180f 36% 52%, transparent 52%),
+    linear-gradient(145deg, transparent 0 36%, #090d12 36% 52%, transparent 52%),
+    linear-gradient(215deg, transparent 0 36%, #111722 36% 52%, transparent 52%),
     repeating-linear-gradient(90deg, #ffffff06 0 1px, transparent 1px 54px),
-    linear-gradient(#2a1b12, #0b0705);
-  border-bottom: 16px solid #090806;
+    linear-gradient(#151b24, #05070a);
+  border-bottom: 16px solid #05070a;
   bottom: 0;
-  box-shadow: 0 34px 90px #000, inset 0 -90px 90px #000b, 0 0 45px #c58b4f18;
+  box-shadow: 0 34px 90px #000, inset 0 -90px 90px #000b, 0 0 45px #1d3d5c22;
   height: min(54vh, 430px);
   left: 0;
   opacity: 0.9;
@@ -17,8 +17,8 @@
 
 .login-cabin::before {
   background:
-    linear-gradient(90deg, #080806 0 4px, transparent 4px 100%),
-    linear-gradient(170deg, transparent 0 42%, #080806 43% 45%, transparent 46%);
+    linear-gradient(90deg, #05070a 0 4px, transparent 4px 100%),
+    linear-gradient(170deg, transparent 0 42%, #05070a 43% 45%, transparent 46%);
   bottom: 35%;
   content: "";
   height: 210px;
@@ -37,9 +37,9 @@
 }
 
 .login-window {
-  background: radial-gradient(circle, #f0c87d 0 35%, #8f5728 58%, transparent 70%);
+  background: radial-gradient(circle, #d7dde6 0 24%, #8d101b99 42%, transparent 70%);
   bottom: 30%;
-  box-shadow: 0 0 34px #d0924f80;
+  box-shadow: 0 0 26px #8d101b66;
   height: 46px;
   left: 21%;
   position: absolute;

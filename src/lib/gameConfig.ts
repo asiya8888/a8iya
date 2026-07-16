@@ -5,7 +5,7 @@ export const STARTING_LIVES = 3;
 export const STARTING_SUPPLIES = 4;
 export const FINAL_NIGHT = 5;
 
-export const encounterDelay = () => 10000 + Math.random() * 10000;
+export const encounterDelay = () => 3000 + Math.random() * 2000;
 
 export function gameSubtitle(status: GameStatus) {
   if (status === 'won') return 'The sun has cleared the ridge.';

@@ -1,9 +1,9 @@
 .login-shell {
   align-items: center;
   background:
-    radial-gradient(circle at 22% 78%, #c58b4f1f, transparent 18%),
+    radial-gradient(circle at 24% 78%, #8d101b18, transparent 18%),
     linear-gradient(90deg, #030405 0 12%, transparent 42%, #030405d9 100%),
-    linear-gradient(180deg, #0b1420 0%, #162335 48%, #050607 100%);
+    linear-gradient(180deg, #07101b 0%, #101b2a 48%, #05070b 100%);
   display: grid;
   gap: 26px;
   grid-template-columns: minmax(320px, 1fr) minmax(280px, 380px);
@@ -25,17 +25,17 @@
 }
 
 .login-copy h1 {
-  color: #e7ddd0;
-  font-size: clamp(4rem, 11vw, 8.6rem);
+  color: #e8edf2;
+  font-family: "Special Elite", Georgia, serif;
+  font-size: clamp(5rem, 13vw, 10rem);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 0.86;
+  line-height: 0.82;
   margin: 0 0 10px;
-  text-shadow: 0 0 18px #c58b4f2f, 0 8px 28px #000;
+  text-shadow: 0 0 18px #ffffff33, 3px 0 #7a101b88, -3px 0 #1d3d5c88;
 }
 
 .login-copy p:last-child {
-  color: #bca98f;
+  color: #8f9baa;
   font-size: clamp(0.82rem, 1.15vw, 1rem);
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -44,7 +44,7 @@
 }
 
 .title-menu {
-  border-left: 1px solid #c7b89f30;
+  border-left: 1px solid #d6dce430;
   display: grid;
   gap: 10px;
   min-width: 230px;
@@ -53,10 +53,9 @@
 
 .title-menu button {
   background: transparent;
-  color: #d9cdbd;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.15rem;
-  font-weight: 700;
+  color: #d9e1e8;
+  font-size: 0.95rem;
+  font-weight: 800;
   letter-spacing: 0.04em;
   padding: 7px 0;
   text-align: left;
@@ -65,15 +64,15 @@
 
 .title-menu button:hover,
 .title-menu button:focus-visible {
-  color: #f1d094;
+  color: #b81422;
   transform: translateX(5px);
 }
 
 .auth-card,
 .menu-panel {
   background: #05070bcc;
-  border: 1px solid #c7b89f26;
-  box-shadow: 0 24px 90px #000, inset 0 0 38px #c58b4f14;
+  border: 1px solid #2d3a4c;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #1d3d5c33;
   padding: 28px;
 }
 
@@ -90,7 +89,7 @@
 }
 
 .menu-panel {
-  color: #cfc3b4;
+  color: #b8c2cc;
   line-height: 1.6;
 }
 
@@ -102,5 +101,5 @@
     gap: 18px;
     transform: none;
   }
-  .title-menu { border-left: 0; border-top: 1px solid #c7b89f30; padding-top: 16px; }
+  .title-menu { border-left: 0; border-top: 1px solid #d6dce430; padding-top: 16px; }
 }
