@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { CabinScene } from './CabinScene';
 import { DiaryFragment } from './DiaryFragment';
 import { DoorPrompt } from './DoorPrompt';
@@ -9,12 +10,17 @@ import { useCabinGame } from '../lib/useCabinGame';
 import { snowStyle } from '../lib/snow';
 
 type GameScreenProps = {
+  autoStart?: boolean;
   onSignOut: () => void;
 };
 
-export function GameScreen({ onSignOut }: GameScreenProps) {
+export function GameScreen({ autoStart = false, onSignOut }: GameScreenProps) {
   const game = useCabinGame();
   const choiceLocked = game.status !== 'playing';
+
+  useEffect(() => {
+    if (autoStart && game.status === 'ready') game.startNight();
+  }, [autoStart, game]);
 
   const signOut = () => {
     game.restart();

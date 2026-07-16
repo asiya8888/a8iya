@@ -2,7 +2,7 @@
   background:
     linear-gradient(90deg, #0008, transparent 14%, transparent 82%, #0009),
     repeating-linear-gradient(90deg, #ffffff05 0 1px, transparent 1px 74px),
-    repeating-linear-gradient(0deg, #0d0907 0 3px, transparent 3px 78px);
+    repeating-linear-gradient(0deg, #080c12 0 3px, transparent 3px 78px);
   inset: 0;
   opacity: 0.72;
   position: absolute;
@@ -10,7 +10,7 @@
 
 .wall-planks::before {
   background:
-    radial-gradient(ellipse at 32% 42%, #d0995b18, transparent 28%),
+    radial-gradient(ellipse at 32% 42%, #6a8fb818, transparent 28%),
     radial-gradient(ellipse at 76% 18%, #0008, transparent 32%);
   content: "";
   inset: 0;
@@ -29,7 +29,7 @@
 }
 
 .window-sill {
-  background: linear-gradient(180deg, #5b3a26, #1a0f0a);
+  background: linear-gradient(180deg, #263241, #05070a);
   bottom: -16px;
   box-shadow: 0 10px 22px #0009;
   height: 18px;
@@ -56,7 +56,7 @@
 }
 
 .peephole {
-  background: radial-gradient(circle, #0b0c10 0 38%, #a27a4d 45%, #21100a 70%);
+  background: radial-gradient(circle, #0b0c10 0 38%, #6a8fb8 45%, #05070a 70%);
   border-radius: 50%;
   box-shadow: 0 0 12px #000;
   height: 15px;
@@ -69,12 +69,12 @@
 
 .game-status-knocking .peephole {
   animation: peepholePulse 1.8s ease-in-out infinite;
-  box-shadow: 0 0 18px #000, 0 0 24px #c99a6440;
+  box-shadow: 0 0 18px #000, 0 0 24px #8d101b55;
 }
 
 .lock-plate {
-  background: linear-gradient(90deg, #2d1a10, #a77a4b, #26150d);
-  border: 1px solid #140906;
+  background: linear-gradient(90deg, #05070a, #6a8fb8, #080c12);
+  border: 1px solid #020306;
   box-shadow: 0 0 16px #0008;
   height: 38px;
   position: absolute;
@@ -84,7 +84,7 @@
 }
 
 .hinge {
-  background: linear-gradient(90deg, #130b08, #73502f, #180c07);
+  background: linear-gradient(90deg, #05070a, #344257, #080c12);
   border-radius: 2px;
   box-shadow: inset 0 0 8px #000;
   height: 48px;
@@ -97,7 +97,7 @@
 .hinge-bottom { bottom: 118px; }
 
 .cabin-trim {
-  background: linear-gradient(180deg, #51311f, #170d09);
+  background: linear-gradient(180deg, #263241, #05070a);
   bottom: 0;
   box-shadow: 0 -10px 26px #0007;
   height: 34px;
@@ -116,7 +116,7 @@
 
 .ash-specks span {
   animation: ash-drift 6s ease-in-out infinite;
-  background: #caa06a66;
+  background: #8f9baa66;
   border-radius: 50%;
   height: 2px;
   position: absolute;

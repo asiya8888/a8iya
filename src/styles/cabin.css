@@ -1,7 +1,7 @@
 .cabin {
   background:
-    radial-gradient(circle at 46% 82%, #b56b3f66, transparent 34%),
-    linear-gradient(90deg, #1b100a, #40352d 44%, #140b08);
+    radial-gradient(circle at 46% 82%, #8d101b40, transparent 34%),
+    linear-gradient(90deg, #05070a, #313844 44%, #040506);
   border: 1px solid #263241;
   box-shadow: inset 0 0 38px #000, 0 24px 70px #0008;
   min-height: 620px;
@@ -12,8 +12,8 @@
 .cabin::before {
   animation: candle 2.4s ease-in-out infinite;
   background:
-    radial-gradient(circle at 25% 92%, #a461347a, transparent 28%),
-    radial-gradient(circle at 50% 100%, #c57a4594, transparent 64%);
+    radial-gradient(circle at 25% 92%, #8d101b55, transparent 28%),
+    radial-gradient(circle at 50% 100%, #4a5c735c, transparent 64%);
   content: "";
   inset: 38% 0 0;
   position: absolute;
@@ -28,8 +28,8 @@
 }
 
 .window-frame {
-  background: linear-gradient(90deg, #21150f, #4a3425, #160d09);
-  box-shadow: 0 20px 38px #0008, inset 0 0 14px #c08a5830;
+  background: linear-gradient(90deg, #07090d, #1b2533, #05070a);
+  box-shadow: 0 20px 38px #0008, inset 0 0 14px #6a8fb822;
   height: 254px;
   left: 7%;
   padding: 13px;
@@ -76,9 +76,9 @@
 
 .door {
   background:
-    linear-gradient(90deg, #160b06, #57341f 46%, #1a0c07),
+    linear-gradient(90deg, #050506, #1b2533 46%, #07090d),
     repeating-linear-gradient(90deg, #0000 0 24px, #00000024 25px 27px);
-  border: 5px solid #170b06;
+  border: 5px solid #05070a;
   box-shadow: inset 0 0 48px #000, inset 18px 0 28px #0006;
   height: 100%;
   position: relative;
@@ -86,10 +86,10 @@
 }
 
 .door-frame {
-  background: linear-gradient(90deg, #130906, #4b2d1b, #120806);
-  border: 2px solid #0b0604;
+  background: linear-gradient(90deg, #05070a, #263241, #05070a);
+  border: 2px solid #020306;
   bottom: 0;
-  box-shadow: 0 0 42px #000b, inset 0 0 12px #c3834a28;
+  box-shadow: 0 0 42px #000b, inset 0 0 12px #6a8fb822;
   height: 452px;
   left: 72%;
   padding: 14px 12px 0;
@@ -100,7 +100,7 @@
 }
 
 .door-panel {
-  border: 2px solid #72452a;
+  border: 2px solid #344257;
   box-shadow: inset 0 0 18px #0007;
   height: 140px;
   margin: 45px auto 0;
@@ -108,7 +108,7 @@
 }
 
 .knob {
-  background: radial-gradient(circle at 35% 32%, #d5b98a, #7d5735 48%, #2a160d);
+  background: radial-gradient(circle at 35% 32%, #d6dce4, #344257 48%, #05070a);
   border-radius: 50%;
   height: 18px;
   position: absolute;
@@ -119,7 +119,7 @@
 
 .floor-light {
   animation: candle 1.7s ease-in-out infinite;
-  background: radial-gradient(ellipse, #c57a4575, transparent 70%);
+  background: radial-gradient(ellipse, #8d101b42, transparent 70%);
   bottom: -80px;
   height: 230px;
   position: absolute;

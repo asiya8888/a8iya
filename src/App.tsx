@@ -16,6 +16,7 @@ function App() {
   const [authError] = useState(readAuthErrorFromUrl);
   const [authMode, setAuthMode] = useState<AuthMode>('signin');
   const [menuPanel, setMenuPanel] = useState<MenuPanel>(authError ? 'auth' : null);
+  const [showGame, setShowGame] = useState(false);
   const loginSnow = Array.from({ length: 56 }, (_, index) => (
     <span className="login-snow" key={index} style={snowStyle(index)} />
   ));
@@ -30,13 +31,23 @@ function App() {
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       if (nextSession) clearAuthCallbackUrl();
+      else setShowGame(false);
     });
 
     return () => data.subscription.unsubscribe();
   }, []);
 
   const signOut = () => {
+    setShowGame(false);
     void supabase.auth.signOut();
+  };
+
+  const beginNight = () => {
+    if (session) {
+      setShowGame(true);
+      return;
+    }
+    openAuth('signin');
   };
 
   const openAuth = (mode: AuthMode) => {
@@ -60,7 +71,7 @@ function App() {
     );
   }
 
-  if (!session) {
+  if (!session || !showGame) {
     return (
       <main className="login-shell">
         <div className="login-cabin" aria-hidden="true">
@@ -75,15 +86,21 @@ function App() {
             <p>A quiet cabin, a long storm, and a door you may regret opening.</p>
           </div>
           <nav className="title-menu" aria-label="Main menu">
-            <button onClick={() => openAuth('signin')}>Begin Night</button>
+            <button onClick={beginNight}>Begin Night</button>
             <button onClick={() => openPanel('diary')}>The Diary</button>
             <button onClick={() => openPanel('settings')}>Settings</button>
-            <button onClick={() => openAuth('signin')}>Log In</button>
-            <button onClick={() => openAuth('signup')}>Don't have an account? Sign Up</button>
+            {session ? (
+              <button onClick={signOut}>Log Out</button>
+            ) : (
+              <>
+                <button onClick={() => openAuth('signin')}>Log In</button>
+                <button onClick={() => openAuth('signup')}>Don't have an account? Sign Up</button>
+              </>
+            )}
             <button onClick={() => setMenuPanel(null)}>Exit</button>
           </nav>
         </section>
-        {menuPanel === 'auth' && (
+        {!session && menuPanel === 'auth' && (
           <Auth
             initialMessage={authError}
             initialMode={authMode}
@@ -106,7 +123,7 @@ function App() {
     );
   }
 
-  return <GameScreen onSignOut={signOut} />;
+  return <GameScreen autoStart onSignOut={signOut} />;
 }
 
 export default App;
