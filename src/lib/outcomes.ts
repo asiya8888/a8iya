@@ -11,7 +11,7 @@ export type ChoiceResult = {
 
 export function resolveChoice(visitor: Visitor, choice: 'allow' | 'refuse'): ChoiceResult {
   if (visitor.kind === 'skinwalker' && choice === 'allow') {
-    return { diary: true, livesLost: 3, message: 'The room changes before you understand why.', suppliesLost: 0, gameOver: true, jumpscare: true };
+    return { diary: true, livesLost: 3, message: 'Something got inside.', suppliesLost: 0, gameOver: true, jumpscare: true };
   }
 
   if (visitor.kind === 'human' && choice === 'refuse') {

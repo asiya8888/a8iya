@@ -10,7 +10,7 @@ export const emptyEncounterDelay = () => 5000 + Math.random() * 2500;
 
 export function gameSubtitle(status: GameStatus) {
   if (status === 'won') return 'The sun has cleared the ridge.';
-  if (status === 'waiting') return 'The room settles. For a while, nothing asks to be let in.';
+  if (status === 'waiting') return 'Waiting for the next knock.';
   if (status === 'knocking') return 'Someone is outside. The peephole is dark.';
   if (status === 'jumpscare') return 'Something smiles from the dark hallway.';
   return 'Listen closely. Look twice. Dawn is far away.';
