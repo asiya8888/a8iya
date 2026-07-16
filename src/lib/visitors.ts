@@ -100,7 +100,7 @@ const makeFace = (kind: VisitorKind, night: number): FaceFeature => {
 };
 
 export const makeVisitor = (id: number, night: number, memories: VisitorMemory[] = []): Visitor => {
-  const empty = Math.random() > 0.92;
+  const empty = Math.random() < 0.05;
   const memory = !empty && memories.length > 0 && Math.random() > 0.72 ? pick(memories) : undefined;
   const kind: VisitorKind = empty ? 'empty' : Math.random() < 0.38 + night * 0.06 ? 'skinwalker' : 'human';
   const eventText = empty ? pick(emptyEvents) : undefined;

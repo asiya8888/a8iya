@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { unlockDiaryPage } from './diaryPages';
-import { encounterDelay, FINAL_NIGHT, gameSubtitle, STARTING_LIVES, STARTING_SUPPLIES, TOTAL_VISITORS } from './gameConfig';
+import { emptyEncounterDelay, encounterDelay, FINAL_NIGHT, gameSubtitle, STARTING_LIVES, STARTING_SUPPLIES, TOTAL_VISITORS } from './gameConfig';
 import { playEventSound } from './eventSounds';
 import { resolveChoice } from './outcomes';
 import { randomQuestion } from './questions';
@@ -78,9 +78,7 @@ export function useCabinGame() {
     if (visitor.kind !== 'empty') memories.current = [{ choice, kind: visitor.kind, name: visitor.name }, ...memories.current].slice(0, 4);
     setOutcome(diaryPage ? `${result.message} ${diaryPage}` : result.message);
     if (result.jumpscare) {
-      setStatus('jumpscare');
-      playJumpscare();
-      stopAmbience();
+      setStatus('jumpscare'); playJumpscare(); stopAmbience();
       jumpscareTimer.current = window.setTimeout(() => setStatus('lost'), 900);
       return;
     }
@@ -88,9 +86,7 @@ export function useCabinGame() {
       const nextLives = lives - result.livesLost;
       setLives(nextLives);
       if (nextLives <= 0) {
-        setStatus('lost');
-        playJumpscare();
-        stopAmbience();
+        setStatus('lost'); playJumpscare(); stopAmbience();
         return;
       }
     }
@@ -100,6 +96,13 @@ export function useCabinGame() {
   };
 
   const lookThroughPeephole = () => {
+    if (visitor.kind === 'empty') {
+      playDoorCreak(); playEventSound('wind');
+      nextKnockTimer.current = window.setTimeout(() => playEventSound('footsteps'), 900);
+      setOutcome(visitor.eventText ?? 'Nobody is outside.'); setStatus('waiting');
+      nextVisitorTimer.current = window.setTimeout(nextVisitor, emptyEncounterDelay());
+      return;
+    }
     playDoorCreak(); setStatus('playing'); setMusicIntensity(visitor.kind === 'skinwalker');
   };
 
