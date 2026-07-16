@@ -1,0 +1,66 @@
+.intro-shell {
+  align-items: center;
+  background:
+    linear-gradient(90deg, #000c, transparent 45%, #000d),
+    radial-gradient(circle at 22% 72%, #8d101b20, transparent 18%),
+    linear-gradient(180deg, #07111e, #020306 78%);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 24px;
+  position: relative;
+}
+
+.intro-shell--fade { animation: introFade 2.4s ease forwards; }
+
+.intro-panel {
+  animation: introFrame 0.8s ease both;
+  background: #05070bcc;
+  border: 1px solid #2d3a4c;
+  box-shadow: 0 24px 90px #000, inset 0 0 38px #1d3d5c33;
+  max-width: 620px;
+  padding: 34px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.intro-panel h1 {
+  color: #e8edf2;
+  font-family: "Special Elite", Georgia, serif;
+  font-size: clamp(3.4rem, 10vw, 7rem);
+  line-height: 0.9;
+  margin: 12px 0;
+}
+
+.intro-panel p {
+  color: #c4ced8;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.intro-panel button {
+  background: #8d101b;
+  color: #edf2f7;
+  font-weight: 800;
+  padding: 13px 18px;
+  text-transform: uppercase;
+}
+
+.intro-snow {
+  animation: loginSnow linear infinite;
+  background: #f1f6fb;
+  border-radius: 48% 62% 43% 58%;
+  clip-path: polygon(50% 0, 64% 34%, 100% 45%, 66% 61%, 56% 100%, 40% 66%, 0 55%, 36% 39%);
+  position: fixed;
+  top: -10px;
+}
+
+@keyframes introFrame {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes introFade {
+  to { background: #000; opacity: 0; }
+}

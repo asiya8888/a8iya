@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { unlockDiaryPage } from './diaryPages';
+import { finalEnding } from './endings';
 import { emptyEncounterDelay, encounterDelay, FINAL_NIGHT, gameSubtitle, STARTING_LIVES, STARTING_SUPPLIES, TOTAL_VISITORS } from './gameConfig';
 import { playEventSound } from './eventSounds';
 import { resolveChoice } from './outcomes';
@@ -17,6 +18,8 @@ export function useCabinGame() {
   const [lives, setLives] = useState(STARTING_LIVES);
   const [supplies, setSupplies] = useState(STARTING_SUPPLIES);
   const [diaryCount, setDiaryCount] = useState(0);
+  const [helped, setHelped] = useState(0);
+  const [refused, setRefused] = useState(0);
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState<GameStatus>('ready');
   const [shaking, setShaking] = useState(false);
@@ -34,8 +37,7 @@ export function useCabinGame() {
   const clearTimers = () => [nextKnockTimer, nextVisitorTimer, jumpscareTimer].forEach((timer) => window.clearTimeout(timer.current));
 
   const resetEncounter = (next: Visitor) => {
-    setVisitor(next);
-    setEntries([]); setOutcome('');
+    setVisitor(next); setEntries([]); setOutcome('');
     setRemainingAnswers(next.answers); setRemainingInspections(next.inspections);
     setAskedThisVisitor(false); setLookedThisVisitor(false);
     setMusicIntensity(next.kind === 'skinwalker');
@@ -51,21 +53,19 @@ export function useCabinGame() {
   const nextVisitor = useCallback(() => {
     setScore((currentScore) => currentScore + 1);
     if (visitorIndex >= TOTAL_VISITORS) {
-      setStatus('won');
-      stopAmbience();
+      setStatus('won'); stopAmbience();
       return;
     }
 
     const nextIndex = visitorIndex + 1;
     const next = makeVisitor(nextIndex, night, memories.current);
-    setVisitorIndex(nextIndex);
-    resetEncounter(next);
+    setVisitorIndex(nextIndex); resetEncounter(next);
     nextKnockTimer.current = window.setTimeout(() => triggerArrival(next.eventSound), 140);
   }, [night, triggerArrival, visitorIndex]);
   const restart = () => {
     clearTimers();
     setNight(1); setVisitorIndex(1); setLives(STARTING_LIVES); setSupplies(STARTING_SUPPLIES);
-    setDiaryCount(0); memories.current = [];
+    setDiaryCount(0); setHelped(0); setRefused(0); memories.current = [];
     setScore(0); setStatus('ready');
     stopAmbience();
     resetEncounter(makeVisitor(1, 1));
@@ -74,7 +74,8 @@ export function useCabinGame() {
   const makeChoice = (choice: 'allow' | 'refuse') => {
     const result = resolveChoice(visitor, choice);
     const diaryPage = result.diary ? unlockDiaryPage(diaryCount) : '';
-    if (result.diary) setDiaryCount((count) => count + 1);
+    if (result.diary) setDiaryCount((count) => count + 1); if (visitor.kind !== 'empty' && choice === 'allow') setHelped((count) => count + 1);
+    if (visitor.kind !== 'empty' && choice === 'refuse') setRefused((count) => count + 1);
     if (visitor.kind !== 'empty') memories.current = [{ choice, kind: visitor.kind, name: visitor.name }, ...memories.current].slice(0, 4);
     setOutcome(diaryPage ? `${result.message} ${diaryPage}` : result.message);
     if (result.jumpscare) {
@@ -91,8 +92,7 @@ export function useCabinGame() {
       }
     }
     if (result.suppliesLost > 0) setSupplies((current) => Math.max(0, current - result.suppliesLost));
-    setStatus('waiting');
-    nextVisitorTimer.current = window.setTimeout(nextVisitor, encounterDelay());
+    setStatus('waiting'); nextVisitorTimer.current = window.setTimeout(nextVisitor, encounterDelay());
   };
 
   const lookThroughPeephole = () => {
@@ -140,6 +140,7 @@ export function useCabinGame() {
 
   return {
     diaryCount, entries, lives, night, outcome, score, shaking, status, subtitle, supplies, visitor, visitorIndex,
+    ending: finalEnding({ diaryCount, helped, refused, supplies }),
     totalVisitors: TOTAL_VISITORS,
     finishedAllNights: status === 'won' && night >= FINAL_NIGHT,
     canAsk: remainingAnswers.length > 0 && !askedThisVisitor,

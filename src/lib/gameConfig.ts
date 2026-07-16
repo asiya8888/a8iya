@@ -3,7 +3,7 @@ import type { GameStatus } from './gameTypes';
 export const TOTAL_VISITORS = 10;
 export const STARTING_LIVES = 3;
 export const STARTING_SUPPLIES = 4;
-export const FINAL_NIGHT = 5;
+export const FINAL_NIGHT = 7;
 
 export const encounterDelay = () => 3000 + Math.random() * 2000;
 export const emptyEncounterDelay = () => 5000 + Math.random() * 2500;

@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { CabinScene } from './CabinScene';
 import { DiaryFragment } from './DiaryFragment';
 import { DoorPrompt } from './DoorPrompt';
 import { EndScreen } from './EndScreen';
 import { GameHud } from './GameHud';
+import { IntroSequence } from './IntroSequence';
 import { QuietMoment } from './QuietMoment';
 import { VisitorCard } from './VisitorCard';
 import { useCabinGame } from '../lib/useCabinGame';
@@ -16,16 +17,27 @@ type GameScreenProps = {
 
 export function GameScreen({ autoStart = false, onSignOut }: GameScreenProps) {
   const game = useCabinGame();
+  const [introDone, setIntroDone] = useState(!autoStart);
   const choiceLocked = game.status !== 'playing';
-
-  useEffect(() => {
-    if (autoStart && game.status === 'ready') game.startNight();
-  }, [autoStart, game]);
 
   const signOut = () => {
     game.restart();
     onSignOut();
   };
+
+  const restartStory = () => {
+    setIntroDone(false);
+    game.restart();
+  };
+
+  const finishIntro = () => {
+    setIntroDone(true);
+    game.startNight();
+  };
+
+  if (autoStart && game.status === 'ready' && !introDone) {
+    return <IntroSequence onComplete={finishIntro} />;
+  }
 
   if (game.status === 'ready') {
     return (
@@ -103,10 +115,11 @@ export function GameScreen({ autoStart = false, onSignOut }: GameScreenProps) {
       )}
       {game.status === 'won' && (
         <EndScreen
-          title={game.finishedAllNights ? 'You Survived Whiteout' : `Night ${game.night} Survived`}
-          text={game.finishedAllNights ? 'Five nights passed. The diary was enough, for now.' : 'Ten knocks passed. The next night will be harder.'}
+          title={game.finishedAllNights ? game.ending.title : `Night ${game.night} Survived`}
+          text={game.finishedAllNights ? game.ending.text : 'Ten knocks passed. The next night will be harder.'}
           actionLabel={game.finishedAllNights ? 'Play Again' : 'Next Night'}
-          onRestart={game.finishedAllNights ? game.restart : game.nextNight}
+          label={game.finishedAllNights ? 'Ending' : undefined}
+          onRestart={game.finishedAllNights ? restartStory : game.nextNight}
         />
       )}
     </main>
