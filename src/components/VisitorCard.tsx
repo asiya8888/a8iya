@@ -45,10 +45,10 @@ export function VisitorCard({
           Look Closer
         </button>
         <button disabled={disabled} onClick={onAllow}>
-          Let Them In
+          Open The Door
         </button>
         <button disabled={disabled} onClick={onRefuse}>
-          Refuse Entry
+          Keep The Door Closed
         </button>
       </div>
     </section>

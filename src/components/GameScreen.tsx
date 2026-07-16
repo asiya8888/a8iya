@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CabinScene } from './CabinScene';
 import { DiaryFragment } from './DiaryFragment';
 import { DoorPrompt } from './DoorPrompt';
@@ -34,6 +34,12 @@ export function GameScreen({ autoStart = false, onSignOut }: GameScreenProps) {
     setIntroDone(true);
     game.startNight();
   };
+
+  useEffect(() => {
+    if (game.status !== 'knocking') return undefined;
+    const timer = window.setTimeout(game.lookThroughPeephole, 1100);
+    return () => window.clearTimeout(timer);
+  }, [game.status]);
 
   if (autoStart && game.status === 'ready' && !introDone) {
     return <IntroSequence onComplete={finishIntro} />;
@@ -85,10 +91,7 @@ export function GameScreen({ autoStart = false, onSignOut }: GameScreenProps) {
           {game.status === 'waiting' ? (
             <QuietMoment outcome={game.outcome} />
           ) : game.status === 'knocking' ? (
-            <DoorPrompt
-              onLook={game.lookThroughPeephole}
-              onIgnore={() => game.makeChoice('refuse')}
-            />
+            <DoorPrompt />
           ) : (
             <VisitorCard
               disabled={choiceLocked}
