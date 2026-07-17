@@ -73,14 +73,18 @@ export function makeConversation(kind: VisitorKind, night: number) {
 
 export function makeCharacterConversation(character: GameCharacter): ConversationProfile {
   const known = character.knows?.length ? 'I know a few people who might come this way. That worries me more than it helps.' : humanProfile().alone;
+  const human = humanProfile();
+  const mimic = mimicProfile(4);
 
   return {
-    age: character.kind === 'skinwalker' ? 'old enough to knock' : humanProfile().age,
+    age: character.kind === 'skinwalker' ? 'old enough to knock' : human.age,
     alone: known,
-    cold: character.kind === 'skinwalker' ? mimicProfile(4).cold : humanProfile().cold,
+    cold: character.kind === 'skinwalker' ? mimic.cold : human.cold,
     event: character.backstory,
-    origin: character.appearance,
-    outside: character.behaviors[0] ?? humanProfile().outside,
+    origin: character.kind === 'skinwalker' ? mimic.origin : human.origin,
+    outside: character.kind === 'skinwalker'
+      ? 'The storm is crowded. I heard voices moving between the trees.'
+      : 'Snow, wind, and tracks crossing over each other. I could not tell which ones were mine.',
     personality: character.kind === 'skinwalker' ? 'evasive' : 'calm',
   };
 }
