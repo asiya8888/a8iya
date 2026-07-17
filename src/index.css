@@ -11,6 +11,8 @@
 @import './styles/login.css';
 @import './styles/login-scene.css';
 @import './styles/auth-form.css';
+@import './styles/responsive.css';
+@import './styles/responsive-mobile.css';
 
 :root {
   color: #d6dce4;

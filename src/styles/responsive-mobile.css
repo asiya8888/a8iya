@@ -1,0 +1,139 @@
+@media (max-width: 760px) {
+  .game-shell,
+  .menu-shell,
+  .login-shell,
+  .intro-shell {
+    padding: 14px;
+  }
+
+  .hud {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .stats {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .stats span,
+  .stats button {
+    font-size: 0.78rem;
+    min-width: 0;
+    padding: 9px 8px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 10vw, 3.2rem);
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
+    margin: 12px auto 16px;
+  }
+
+  .login-copy h1 {
+    font-size: clamp(3.6rem, 18vw, 6rem);
+  }
+
+  .title-menu {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .visitor-card,
+  .door-prompt,
+  .quiet-card {
+    padding: 14px;
+  }
+
+  .visitor-copy h2,
+  .door-prompt h2 {
+    font-size: clamp(1.55rem, 8vw, 2rem);
+  }
+
+  .interaction-log {
+    max-height: 34svh;
+    overflow-y: auto;
+  }
+
+  .intro-panel,
+  .end-screen > div {
+    padding: 24px 18px;
+  }
+
+  .intro-panel h1 {
+    font-size: clamp(2.8rem, 18vw, 5rem);
+  }
+}
+
+@media (max-width: 430px) {
+  .game-shell,
+  .menu-shell,
+  .login-shell,
+  .intro-shell {
+    padding: 10px;
+  }
+
+  .game-layout {
+    gap: 14px;
+  }
+
+  .cabin {
+    min-height: 360px;
+  }
+
+  .window-frame {
+    height: 160px;
+    left: 5%;
+    top: 82px;
+    width: 43%;
+  }
+
+  .door-frame {
+    height: 285px;
+    left: 75%;
+    width: min(190px, 42%);
+  }
+
+  .door-panel {
+    height: 118px;
+    margin-top: 34px;
+  }
+
+  .knob {
+    right: 26px;
+    top: 210px;
+  }
+
+  .lock-plate {
+    right: 33px;
+    top: 194px;
+  }
+
+  .portrait {
+    height: 250px;
+  }
+
+  .shoulders {
+    width: 190px;
+  }
+
+  .face {
+    top: 38px;
+  }
+
+  .auth-card,
+  .menu-panel {
+    padding: 18px;
+    width: 100%;
+  }
+
+  .login-cabin {
+    left: -36vw;
+    width: 145vw;
+  }
+}
