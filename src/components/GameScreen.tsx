@@ -30,7 +30,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   };
 
   const restartStory = () => {
-    setIntroDone(false);
+    setIntroDone(settings.skipIntro);
     game.restart();
   };
 
@@ -46,8 +46,8 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   }, [game.status]);
 
   useEffect(() => {
-    if (autoStart && game.status === 'ready' && introDone) game.startNight();
-  }, [autoStart, game.status, introDone]);
+    if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
+  }, [autoStart, game.status, introDone, settings.skipIntro]);
 
   useEffect(() => {
     if (!game.finishedAllNights || game.status !== 'won') return;
@@ -71,7 +71,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   }, [game.status, game.outcome, game.visitor.kind]);
 
   if (autoStart && game.status === 'ready' && !introDone && !settings.skipIntro) {
-    return <IntroSequence onComplete={finishIntro} />;
+    return <IntroSequence onComplete={finishIntro} settings={settings} />;
   }
 
   if (game.status === 'ready') {
@@ -79,7 +79,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   }
 
   return (
-    <main className={`game-shell game-status-${game.status} ${windowShadow ? 'has-window-shadow' : ''}`}>
+    <main className={`game-shell game-status-${game.status} ${windowShadow ? 'has-window-shadow' : ''} ${settings.screenShake ? '' : 'screen-shake-off'}`}>
       <div className={`play-area ${game.shaking && settings.screenShake ? 'is-shaking' : ''}`}>
         <GameHud
           diaryCount={game.diaryCount}
@@ -96,7 +96,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
         <div className="game-layout">
           <CabinScene />
           {game.status === 'waiting' ? (
-            <QuietMoment outcome={game.outcome} />
+            <QuietMoment outcome={game.outcome} settings={settings} />
           ) : game.status === 'knocking' ? (
             <DoorPrompt />
           ) : (
@@ -107,6 +107,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
               outcome={game.outcome}
               canAsk={game.canAsk}
               canLook={game.canLook}
+              settings={settings}
               onAsk={game.askQuestion}
               onLook={game.lookCloser}
               onAllow={() => game.makeChoice('allow')}

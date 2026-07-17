@@ -17,8 +17,12 @@ export const defaultSettings: GameSettings = {
 };
 
 export const readSettings = () => {
-  const saved = localStorage.getItem('whiteout-settings');
-  return saved ? { ...defaultSettings, ...JSON.parse(saved) } as GameSettings : defaultSettings;
+  try {
+    const saved = localStorage.getItem('whiteout-settings');
+    return saved ? { ...defaultSettings, ...JSON.parse(saved) } as GameSettings : defaultSettings;
+  } catch {
+    return defaultSettings;
+  }
 };
 
 export const saveSettings = (settings: GameSettings) => {

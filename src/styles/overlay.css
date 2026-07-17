@@ -54,6 +54,12 @@
   z-index: 1;
 }
 
+.screen-shake-off .jumpscare,
+.screen-shake-off .jumpscare span,
+.screen-shake-off .jumpscare::before {
+  animation: none;
+}
+
 .end-screen {
   background:
     linear-gradient(135deg, #05080df7, #07111ef2 52%, #020304fa),

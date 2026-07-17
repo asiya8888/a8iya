@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import type { GameSettings } from '../lib/settings';
 import { snowStyle } from '../lib/snow';
 import { startAmbience } from '../lib/sounds';
+import { TypewriterText } from './TypewriterText';
 
 type IntroSequenceProps = {
   onComplete: () => void;
+  settings: GameSettings;
 };
 
 const introFrames = [
@@ -15,7 +18,7 @@ const introFrames = [
   'If you survive seven more nights, the storm should finally pass.',
 ];
 
-export function IntroSequence({ onComplete }: IntroSequenceProps) {
+export function IntroSequence({ onComplete, settings }: IntroSequenceProps) {
   const [frame, setFrame] = useState(0);
   const [ending, setEnding] = useState(false);
   const finalFrame = frame >= introFrames.length;
@@ -39,13 +42,13 @@ export function IntroSequence({ onComplete }: IntroSequenceProps) {
           <>
             <p className="label">Night 1</p>
             <h1>11:43 PM</h1>
-            <p>The storm seems stronger tonight.</p>
+            <TypewriterText settings={settings} text="The storm seems stronger tonight." />
           </>
         ) : (
           <>
             <p className="label">Seven nights remain</p>
             <h1>WHITEOUT</h1>
-            <p>{introFrames[frame]}</p>
+            <TypewriterText settings={settings} text={introFrames[frame]} />
           </>
         )}
         <button onClick={advance}>{finalFrame ? 'Begin' : 'Continue'}</button>
