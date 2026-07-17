@@ -7,7 +7,7 @@ import { GameReadyMenu } from './GameReadyMenu';
 import { IntroSequence } from './IntroSequence';
 import { QuietMoment } from './QuietMoment';
 import { VisitorCard } from './VisitorCard';
-import type { RoomId } from '../lib/rooms';
+import { roomAtPosition, roomCenter } from '../lib/rooms';
 import { markGameCompleted, type GameSettings } from '../lib/settings';
 import { playDoorCreak } from '../lib/sounds';
 import { useCabinGame } from '../lib/useCabinGame';
@@ -22,33 +22,29 @@ type GameScreenProps = {
 export function GameScreen({ autoStart = false, onComplete, onSignOut, settings }: GameScreenProps) {
   const game = useCabinGame();
   const [introDone, setIntroDone] = useState(!autoStart || settings.skipIntro);
-  const [room, setRoom] = useState<RoomId>('living');
+  const [playerPosition, setPlayerPosition] = useState(roomCenter('living'));
   const [windowShadow, setWindowShadow] = useState(false);
   const lastShadowOutcome = useRef('');
+  const previousRoom = useRef(roomAtPosition(playerPosition));
+  const room = roomAtPosition(playerPosition);
   const choiceLocked = game.status !== 'playing';
   const canExplore = game.status === 'waiting' || game.status === 'knocking';
 
-  const moveRoom = (nextRoom: RoomId) => {
-    if (!canExplore || nextRoom === room) return;
-    playDoorCreak();
-    setRoom(nextRoom);
-  };
   const signOut = () => {
     game.restart();
-    setRoom('living');
+    setPlayerPosition(roomCenter('living'));
     onSignOut();
   };
   const restartStory = () => {
     setIntroDone(settings.skipIntro);
-    setRoom('living');
+    setPlayerPosition(roomCenter('living'));
     game.restart();
   };
   const finishIntro = () => {
     setIntroDone(true);
-    setRoom('living');
+    setPlayerPosition(roomCenter('living'));
     game.startNight();
   };
-
   useEffect(() => {
     if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
   }, [autoStart, game.status, introDone, settings.skipIntro]);
@@ -58,6 +54,11 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
     markGameCompleted();
     onComplete();
   }, [game.finishedAllNights, game.status, onComplete]);
+
+  useEffect(() => {
+    if (previousRoom.current !== room && canExplore) playDoorCreak();
+    previousRoom.current = room;
+  }, [canExplore, room]);
 
   useEffect(() => {
     const shouldShadow =
@@ -102,7 +103,8 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
             canMove={canExplore}
             hasKnock={game.status === 'knocking'}
             onLookThroughDoor={game.lookThroughPeephole}
-            onMove={moveRoom}
+            onPlayerPositionChange={setPlayerPosition}
+            playerPosition={playerPosition}
             room={room}
           />
           {game.status === 'waiting' ? (
