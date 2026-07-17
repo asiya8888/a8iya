@@ -1,6 +1,6 @@
 import type { GameStatus } from './gameTypes';
 
-export const TOTAL_VISITORS = 10;
+export const TOTAL_VISITORS = 5;
 export const STARTING_LIVES = 3;
 export const STARTING_SUPPLIES = 4;
 export const FINAL_NIGHT = 7;

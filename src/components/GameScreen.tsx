@@ -6,7 +6,9 @@ import { GameHud } from './GameHud';
 import { GameReadyMenu } from './GameReadyMenu';
 import { IntroSequence } from './IntroSequence';
 import { QuietMoment } from './QuietMoment';
+import { RoomNavigation } from './RoomNavigation';
 import { VisitorCard } from './VisitorCard';
+import type { RoomId } from '../lib/rooms';
 import { markGameCompleted, type GameSettings } from '../lib/settings';
 import { useCabinGame } from '../lib/useCabinGame';
 
@@ -20,30 +22,29 @@ type GameScreenProps = {
 export function GameScreen({ autoStart = false, onComplete, onSignOut, settings }: GameScreenProps) {
   const game = useCabinGame();
   const [introDone, setIntroDone] = useState(!autoStart || settings.skipIntro);
+  const [room, setRoom] = useState<RoomId>('living');
   const [windowShadow, setWindowShadow] = useState(false);
   const lastShadowOutcome = useRef('');
   const choiceLocked = game.status !== 'playing';
+  const canExplore = game.status === 'waiting' || game.status === 'knocking';
 
   const signOut = () => {
     game.restart();
+    setRoom('living');
     onSignOut();
   };
 
   const restartStory = () => {
     setIntroDone(settings.skipIntro);
+    setRoom('living');
     game.restart();
   };
 
   const finishIntro = () => {
     setIntroDone(true);
+    setRoom('living');
     game.startNight();
   };
-
-  useEffect(() => {
-    if (game.status !== 'knocking') return undefined;
-    const timer = window.setTimeout(game.lookThroughPeephole, 4000);
-    return () => window.clearTimeout(timer);
-  }, [game.status]);
 
   useEffect(() => {
     if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
@@ -93,12 +94,13 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
           onSignOut={signOut}
         />
         <p className="subtitle">{game.subtitle}</p>
+        <RoomNavigation currentRoom={room} disabled={!canExplore} onChange={setRoom} />
         <div className="game-layout">
-          <CabinScene />
+          <CabinScene room={room} />
           {game.status === 'waiting' ? (
             <QuietMoment outcome={game.outcome} settings={settings} />
           ) : game.status === 'knocking' ? (
-            <DoorPrompt />
+            <DoorPrompt currentRoom={room} onGoToDoor={() => setRoom('living')} onLook={game.lookThroughPeephole} />
           ) : (
             <VisitorCard
               disabled={choiceLocked}
@@ -127,7 +129,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
       {game.status === 'won' && (
         <EndScreen
           title={game.finishedAllNights ? game.ending.title : `Night ${game.night} Survived`}
-          text={game.finishedAllNights ? game.ending.text : 'Ten knocks passed. The next night will be harder.'}
+          text={game.finishedAllNights ? game.ending.text : 'Five knocks passed. The next night will be harder.'}
           actionLabel={game.finishedAllNights ? 'Play Again' : 'Next Night'}
           label={game.finishedAllNights ? 'Ending' : undefined}
           onRestart={game.finishedAllNights ? restartStory : game.nextNight}
