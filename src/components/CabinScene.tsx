@@ -6,6 +6,7 @@ import { LivingRoomScene } from './rooms/LivingRoomScene';
 
 type CabinSceneProps = {
   canMove: boolean;
+  guestCount: number;
   hasKnock: boolean;
   onLookThroughDoor: () => void;
   onPlayerPositionChange: (position: number) => void;
@@ -15,7 +16,7 @@ type CabinSceneProps = {
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-export function CabinScene({ canMove, hasKnock, onLookThroughDoor, onPlayerPositionChange, playerPosition, room }: CabinSceneProps) {
+export function CabinScene({ canMove, guestCount, hasKnock, onLookThroughDoor, onPlayerPositionChange, playerPosition, room }: CabinSceneProps) {
   const [depth, setDepth] = useState(0.45);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const camera = clamp(playerPosition - 0.5, 0, 2);
@@ -59,12 +60,8 @@ export function CabinScene({ canMove, hasKnock, onLookThroughDoor, onPlayerPosit
       <div className="wall-planks" aria-hidden="true" />
       <div className="cabin-world" style={{ '--camera': camera, '--player-x': playerPosition, '--player-depth': depth } as CSSProperties}>
         <div className="cabin-room"><KitchenScene /></div>
-        <div className="cabin-room"><LivingRoomScene hasKnock={hasKnock} onLookThroughDoor={onLookThroughDoor} /></div>
+        <div className="cabin-room"><LivingRoomScene guestCount={guestCount} hasKnock={hasKnock} onLookThroughDoor={onLookThroughDoor} /></div>
         <div className="cabin-room"><BedroomScene /></div>
-        <div className="player" aria-hidden="true">
-          <span className="player-head" />
-          <span className="player-body" />
-        </div>
       </div>
       <div className="touch-move-pad" onPointerDown={startTouch} onPointerMove={dragTouch} onPointerUp={() => { touchStart.current = null; }}>
         <span />

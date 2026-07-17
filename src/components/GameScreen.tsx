@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { CabinScene } from './CabinScene';
-import { DoorPrompt } from './DoorPrompt';
-import { EndScreen } from './EndScreen';
+import { GameEndOverlays } from './GameEndOverlays';
 import { GameHud } from './GameHud';
 import { GameReadyMenu } from './GameReadyMenu';
+import { GameSidePanel } from './GameSidePanel';
 import { IntroSequence } from './IntroSequence';
-import { QuietMoment } from './QuietMoment';
-import { VisitorCard } from './VisitorCard';
 import { roomAtPosition, roomCenter } from '../lib/rooms';
 import { markGameCompleted, type GameSettings } from '../lib/settings';
 import { playDoorCreak } from '../lib/sounds';
 import { useCabinGame } from '../lib/useCabinGame';
+import { useCabinGuests } from '../lib/useCabinGuests';
 
 type GameScreenProps = {
   autoStart?: boolean;
@@ -21,6 +20,7 @@ type GameScreenProps = {
 
 export function GameScreen({ autoStart = false, onComplete, onSignOut, settings }: GameScreenProps) {
   const game = useCabinGame();
+  const cabinGuests = useCabinGuests();
   const [introDone, setIntroDone] = useState(!autoStart || settings.skipIntro);
   const [playerPosition, setPlayerPosition] = useState(roomCenter('living'));
   const [windowShadow, setWindowShadow] = useState(false);
@@ -32,11 +32,13 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
 
   const signOut = () => {
     game.restart();
+    cabinGuests.resetGuests();
     setPlayerPosition(roomCenter('living'));
     onSignOut();
   };
   const restartStory = () => {
     setIntroDone(settings.skipIntro);
+    cabinGuests.resetGuests();
     setPlayerPosition(roomCenter('living'));
     game.restart();
   };
@@ -48,18 +50,19 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   useEffect(() => {
     if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
   }, [autoStart, game.status, introDone, settings.skipIntro]);
-
   useEffect(() => {
     if (!game.finishedAllNights || game.status !== 'won') return;
     markGameCompleted();
     onComplete();
   }, [game.finishedAllNights, game.status, onComplete]);
-
   useEffect(() => {
     if (previousRoom.current !== room && canExplore) playDoorCreak();
     previousRoom.current = room;
   }, [canExplore, room]);
-
+  const allowVisitor = () => {
+    cabinGuests.addAllowedGuest(game.visitor, game.night, game.score);
+    game.makeChoice('allow');
+  };
   useEffect(() => {
     const shouldShadow =
       game.status === 'waiting' &&
@@ -74,14 +77,11 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
     const timer = window.setTimeout(() => setWindowShadow(false), 2600);
     return () => window.clearTimeout(timer);
   }, [game.status, game.outcome, game.visitor.kind]);
-
   if (autoStart && game.status === 'ready' && !introDone && !settings.skipIntro) {
     return <IntroSequence onComplete={finishIntro} settings={settings} />;
   }
 
-  if (game.status === 'ready') {
-    return <GameReadyMenu onStart={game.startNight} />;
-  }
+  if (game.status === 'ready') return <GameReadyMenu onStart={game.startNight} />;
 
   return (
     <main className={`game-shell game-status-${game.status} ${windowShadow ? 'has-window-shadow' : ''} ${settings.screenShake ? '' : 'screen-shake-off'}`}>
@@ -105,27 +105,29 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
             onLookThroughDoor={game.lookThroughPeephole}
             onPlayerPositionChange={setPlayerPosition}
             playerPosition={playerPosition}
+            guestCount={cabinGuests.guests.length}
             room={room}
           />
-          {game.status === 'waiting' ? (
-            <QuietMoment outcome={game.outcome} settings={settings} />
-          ) : game.status === 'knocking' ? (
-            <DoorPrompt currentRoom={room} onLook={game.lookThroughPeephole} />
-          ) : (
-            <VisitorCard
-              disabled={choiceLocked}
-              visitor={game.visitor}
-              entries={game.entries}
-              outcome={game.outcome}
-              canAsk={game.canAsk}
-              canLook={game.canLook}
-              settings={settings}
-              onAsk={game.askQuestion}
-              onLook={game.lookCloser}
-              onAllow={() => game.makeChoice('allow')}
-              onRefuse={() => game.makeChoice('refuse')}
-            />
-          )}
+          <GameSidePanel
+            canAsk={game.canAsk}
+            canLook={game.canLook}
+            disabled={choiceLocked}
+            entries={game.entries}
+            guestMessage={cabinGuests.guestMessage}
+            guests={cabinGuests.guests}
+            onAllow={allowVisitor}
+            onAsk={game.askQuestion}
+            onCheckGuests={() => cabinGuests.checkGuests(game.score)}
+            onLook={game.lookCloser}
+            onPeephole={game.lookThroughPeephole}
+            onRefuse={() => game.makeChoice('refuse')}
+            onTalkGuest={cabinGuests.talkGuest}
+            outcome={game.outcome}
+            room={room}
+            settings={settings}
+            status={game.status}
+            visitor={game.visitor}
+          />
         </div>
       </div>
       {game.status === 'jumpscare' && (
@@ -133,18 +135,15 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
           <span>Game Over</span>
         </div>
       )}
-      {game.status === 'lost' && (
-        <EndScreen danger title="Game Over" text="The cabin goes quiet before sunrise." onRestart={game.restart} />
-      )}
-      {game.status === 'won' && (
-        <EndScreen
-          title={game.finishedAllNights ? game.ending.title : `Night ${game.night} Survived`}
-          text={game.finishedAllNights ? game.ending.text : 'Five knocks passed. The next night will be harder.'}
-          actionLabel={game.finishedAllNights ? 'Play Again' : 'Next Night'}
-          label={game.finishedAllNights ? 'Ending' : undefined}
-          onRestart={game.finishedAllNights ? restartStory : game.nextNight}
-        />
-      )}
+      <GameEndOverlays
+        delayedEnding={cabinGuests.delayedEnding}
+        ending={game.ending}
+        finishedAllNights={game.finishedAllNights}
+        night={game.night}
+        onNextNight={game.nextNight}
+        onRestart={restartStory}
+        status={game.status}
+      />
     </main>
   );
 }

@@ -2,11 +2,12 @@ import { snowStyle } from '../../lib/snow';
 import { SceneHotspot } from './SceneHotspot';
 
 type LivingRoomSceneProps = {
+  guestCount: number;
   hasKnock: boolean;
   onLookThroughDoor: () => void;
 };
 
-export function LivingRoomScene({ hasKnock, onLookThroughDoor }: LivingRoomSceneProps) {
+export function LivingRoomScene({ guestCount, hasKnock, onLookThroughDoor }: LivingRoomSceneProps) {
   return (
     <>
       <p className="room-title">Living Room</p>
@@ -25,6 +26,9 @@ export function LivingRoomScene({ hasKnock, onLookThroughDoor }: LivingRoomScene
       <div className="living-sofa" aria-hidden="true">
         <span className="sofa-back" />
         <span className="sofa-seat" />
+      </div>
+      <div className="seated-guests" aria-hidden="true">
+        {Array.from({ length: Math.min(guestCount, 3) }, (_, index) => <span key={index} />)}
       </div>
       <div className="coat-rack" aria-hidden="true" />
       <div className="door-frame">
