@@ -10,9 +10,10 @@ type GuestPanelProps = {
   onCheckGuests: () => void;
   onTalk: (guestId: string) => void;
   settings: GameSettings;
+  visitorName?: string;
 };
 
-export function GuestPanel({ guests, isKnocking, message, onCheckGuests, onTalk, settings }: GuestPanelProps) {
+export function GuestPanel({ guests, isKnocking, message, onCheckGuests, onTalk, settings, visitorName }: GuestPanelProps) {
   if (guests.length === 0) return null;
 
   return (
@@ -30,7 +31,7 @@ export function GuestPanel({ guests, isKnocking, message, onCheckGuests, onTalk,
       <TypewriterText
         className="quote"
         settings={settings}
-        text={guestLine(guests[0], isKnocking)}
+        text={guestLine(guests[0], isKnocking, visitorName)}
       />
     </section>
   );

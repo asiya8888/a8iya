@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CabinGuest } from './guests';
+import { guestLine, stayLength, type CabinGuest } from './guests';
 import type { Visitor } from './visitors';
 
 export function useCabinGuests() {
@@ -14,21 +14,44 @@ export function useCabinGuests() {
   };
 
   const addAllowedGuest = (visitor: Visitor, night: number, score: number) => {
-    if (visitor.kind === 'empty') return;
+    if (visitor.kind === 'empty' || !visitor.character) return;
+    const character = visitor.character;
+    const stay = stayLength(character);
     setGuests((current) => [
       ...current,
       {
         arrivedAt: score,
+        arrivedNight: night,
+        behaviors: character.behaviors,
+        dialogue: character.dialogue,
         id: `${night}-${visitor.id}-${visitor.name}`,
         kind: visitor.kind,
+        leaveAfterNight: Math.min(7, night + stay - 1),
         name: visitor.name,
+        personality: character.personality,
         talks: 0,
       },
     ]);
   };
 
   const talkGuest = (guestId: string) => {
-    setGuests((current) => current.map((guest) => guest.id === guestId ? { ...guest, talks: guest.talks + 1 } : guest));
+    setGuests((current) => current.map((guest) => {
+      if (guest.id !== guestId) return guest;
+      const nextGuest = { ...guest, talks: guest.talks + 1 };
+      setGuestMessage(`${guest.name}: ${guestLine(nextGuest, false)}`);
+      return nextGuest;
+    }));
+  };
+
+  const advanceNight = (night: number) => {
+    setGuests((current) => {
+      const staying = current.filter((guest) => guest.leaveAfterNight >= night);
+      const departed = current.filter((guest) => guest.leaveAfterNight < night);
+      if (departed.length > 0) {
+        setGuestMessage(`${departed.map((guest) => guest.name).join(', ')} left before dawn.`);
+      }
+      return staying;
+    });
   };
 
   const checkGuests = (score: number) => {
@@ -41,5 +64,5 @@ export function useCabinGuests() {
     setGuestMessage('The guests are quiet, listening to the storm and the door.');
   };
 
-  return { addAllowedGuest, checkGuests, delayedEnding, guestMessage, guests, resetGuests, talkGuest };
+  return { addAllowedGuest, advanceNight, checkGuests, delayedEnding, guestMessage, guests, resetGuests, talkGuest };
 }

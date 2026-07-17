@@ -34,7 +34,7 @@ export function GameSidePanel(props: GameSidePanelProps) {
   );
   if (props.status === 'waiting') return <QuietMoment outcome={props.outcome} settings={props.settings} />;
   if (props.status === 'knocking' && props.room === 'living' && props.guests.length > 0) return (
-    <GuestPanel guests={props.guests} isKnocking message="Someone is outside." onCheckGuests={props.onCheckGuests} onTalk={props.onTalkGuest} settings={props.settings} />
+    <GuestPanel guests={props.guests} isKnocking message="Someone is outside." onCheckGuests={props.onCheckGuests} onTalk={props.onTalkGuest} settings={props.settings} visitorName={props.visitor.name} />
   );
   if (props.status === 'knocking') return <DoorPrompt currentRoom={props.room} onLook={props.onPeephole} />;
   return (

@@ -1,6 +1,6 @@
+import type { GameCharacter } from './characters/types';
 import type { ConversationProfile } from './conversations';
-import { makeConversation } from './conversations';
-import { makeDialogueProfile } from './dialogueProfiles';
+import { makeCharacterConversation } from './conversations';
 import { memoryLine, type VisitorMemory } from './visitorMemory';
 
 export type VisitorKind = 'human' | 'skinwalker' | 'empty';
@@ -35,110 +35,53 @@ export type Visitor = {
   eventText?: string;
   eventSound?: EventSound;
   outcome: MoralOutcome;
+  character?: GameCharacter;
 };
 
-const humanNames = ['Mara Cole', 'Evan Pike', 'Nina Vale', 'Oscar Reed', 'Clara Stone'];
-const walkerNames = ['Jonas Hale', 'Vera Snow', 'Peter Wren', 'Lena Grey', 'Milo Cross'];
-const groupNames = ['Two Hikers', 'Parent and Child', 'Elderly Travelers', 'Four Figures'];
 const pick = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
 
-const emptyEvents = [
-  'Nobody is outside, but the knock is still echoing.',
-  'Only a line of footprints waits on the porch.',
-];
-
 const specialEvents: EventSound[] = ['scratch', 'footsteps', 'roof', 'wind', 'flicker', 'cry', 'inside'];
-const uncertainClues = [
-  'Their hood hides most of their face from the peephole.',
-  "It's difficult to make out their expression in the darkness.",
-  'Their gloves cover most of their hands.',
-  "You cannot tell whether they're shivering or just shifting their weight.",
-  'Snow keeps blowing across the glass whenever you try to focus.',
-];
 
-const makeInspections = (kind: VisitorKind, subtle: boolean) => {
-  const fog = Math.random() > 0.35 ? [pick(uncertainClues)] : [];
-  if (kind === 'human') {
-    return fog.concat([
-      'Their shoulders shake from the cold.',
-      'Snow is melting on their sleeves.',
-      Math.random() > 0.22 ? 'You can see their breath cloud the air.' : "Their breath is faint enough that you question it.",
-      'Their voice trembles like they are trying not to cry.',
-      Math.random() > 0.5 ? 'Their hands look stiff and red from the cold.' : 'Their stare lingers because fear has made them slow to answer.',
-    ]);
-  }
-  const hard = [
-    'Something about their eyes unsettles you.',
-    'Their smile seems to linger for a moment too long.',
-    "You can't quite tell whether their breath reaches the glass.",
-  ];
-  const obvious = [
-    'Their fingers rest against the frame at an uncomfortable angle.',
-    'Their face looks almost familiar, but not quite balanced.',
-    'A shadow crosses their skin even when the firelight does not move.',
-  ];
-  return fog.concat(subtle ? hard : hard.concat(Math.random() > 0.5 ? obvious : []));
-};
+const hashId = (id: string) => [...id].reduce((total, char) => total + char.charCodeAt(0), 0);
+const stablePick = <T,>(items: T[], hash: number, offset: number) => items[(hash + offset) % items.length];
 
-const makeFace = (kind: VisitorKind, night: number): FaceFeature => {
-  const subtle = kind === 'skinwalker' && (night > 1 || Math.random() > 0.35);
-  const humanLooksWrong = kind === 'human' && Math.random() > 0.68;
-  const mimicLooksNormal = kind === 'skinwalker' && Math.random() < 0.45 + night * 0.08;
+const makeFace = (character: GameCharacter, night: number): FaceFeature => {
+  const hash = hashId(character.id);
+  const mimicLooksNormal = character.kind === 'skinwalker' && (hash + night) % 3 === 0;
   return {
-    eyes: mimicLooksNormal || kind === 'human' ? pick(['normal', 'wide']) : pick(['normal', 'wide', 'black']),
-    mouth: mimicLooksNormal || kind === 'human' ? pick(['normal', 'flat', 'tense']) : pick(['flat', 'tense', 'too-wide']),
-    nose: kind === 'skinwalker' && !subtle && Math.random() > 0.86 ? 'missing' : 'normal',
-    hair: pick(['short', 'hood', 'messy', 'long']),
-    skin: mimicLooksNormal ? pick(['warm', 'pale']) : pick(['pale', 'warm', 'frozen']),
-    clothes: pick(['parka', 'scarf', 'coat']),
-    age: pick(['young', 'adult', 'older']),
-    brows: kind === 'skinwalker' ? pick(['soft', 'worried', 'low']) : pick(['soft', 'worried', 'low']),
-    expression: kind === 'skinwalker' ? pick(['calm', 'strained', 'afraid', 'tired']) : pick(['afraid', 'tired', 'strained', 'calm']),
-    lighting: pick(['left', 'right', 'low']),
-    scar: Math.random() > 0.72 || humanLooksWrong,
-    shadow: kind === 'skinwalker' ? Math.random() > 0.58 : humanLooksWrong,
-    breath: kind === 'human' ? Math.random() > 0.12 : mimicLooksNormal && Math.random() > 0.36,
+    eyes: mimicLooksNormal || character.kind === 'human' ? stablePick(['normal', 'wide'], hash, 1) : stablePick(['normal', 'wide', 'black', 'three'], hash, 2),
+    mouth: mimicLooksNormal || character.kind === 'human' ? stablePick(['normal', 'flat', 'tense'], hash, 3) : stablePick(['flat', 'tense', 'too-wide'], hash, 4),
+    nose: character.kind === 'skinwalker' && !mimicLooksNormal && hash % 7 === 0 ? 'missing' : 'normal',
+    hair: stablePick(['short', 'hood', 'messy', 'long'], hash, 5),
+    skin: mimicLooksNormal ? stablePick(['warm', 'pale'], hash, 6) : stablePick(['pale', 'warm', 'frozen'], hash, 7),
+    clothes: stablePick(['parka', 'scarf', 'coat'], hash, 8),
+    age: stablePick(['young', 'adult', 'older'], hash, 9),
+    brows: stablePick(['soft', 'worried', 'low'], hash, 10),
+    expression: stablePick(['afraid', 'tired', 'calm', 'strained'], hash, 11),
+    lighting: stablePick(['left', 'right', 'low'], hash, 12),
+    scar: hash % 5 === 0,
+    shadow: character.kind === 'skinwalker' && !mimicLooksNormal,
+    breath: character.kind === 'human' || mimicLooksNormal,
   };
 };
 
-export const makeVisitor = (id: number, night: number, memories: VisitorMemory[] = []): Visitor => {
-  const empty = Math.random() < 0.05;
-  const memory = !empty && memories.length > 0 && Math.random() > 0.72 ? pick(memories) : undefined;
-  const kind: VisitorKind = empty ? 'empty' : Math.random() < 0.38 + night * 0.06 ? 'skinwalker' : 'human';
-  const eventText = empty ? pick(emptyEvents) : undefined;
+export const makeVisitor = (id: number, night: number, character: GameCharacter, memories: VisitorMemory[] = []): Visitor => {
+  const memory = memories.length > 0 && Math.random() > 0.82 ? pick(memories) : undefined;
   const eventSound = Math.random() > 0.68 ? pick(specialEvents) : undefined;
-  const groupSize = Math.random() > 0.78 ? Math.floor(Math.random() * 3) + 2 : 1;
-  const name = memory?.name ?? (groupSize > 1 ? pick(groupNames) : pick(kind === 'skinwalker' ? walkerNames : humanNames));
-  const outcome: MoralOutcome = kind === 'human' && Math.random() > 0.78 ? pick(['steal', 'injure']) : 'peaceful';
-
-  if (kind === 'empty') {
-    return {
-      id,
-      kind,
-      name: 'The Door',
-      dialogue: ['The porch is empty.'],
-      inspections: [],
-      groupSize,
-      eventText,
-      eventSound,
-      outcome: 'peaceful',
-    };
-  }
-
-  const profile = makeDialogueProfile(kind, night);
   const remembered = memoryLine(memory);
+  const dialogue = remembered ? `${remembered} ${character.dialogue[0]}` : character.dialogue[0];
 
   return {
     id,
-    kind,
-    name,
-    groupSize,
-    eventText,
+    kind: character.kind,
+    name: character.name,
+    groupSize: character.id === 'twins' ? 2 : 1,
     eventSound,
-    outcome,
-    conversation: makeConversation(kind, night),
-    dialogue: [remembered ? `${remembered} ${profile.dialogue[0]}` : profile.dialogue[0]],
-    inspections: makeInspections(kind, night > 2),
-    face: makeFace(kind, night),
+    outcome: character.outcome ?? 'peaceful',
+    conversation: makeCharacterConversation(character),
+    dialogue: [dialogue, ...character.dialogue.slice(1)],
+    inspections: [character.appearance, ...character.inspections, ...character.behaviors],
+    face: makeFace(character, night),
+    character,
   };
 };

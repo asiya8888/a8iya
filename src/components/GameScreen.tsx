@@ -29,7 +29,6 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   const room = roomAtPosition(playerPosition);
   const choiceLocked = game.status !== 'playing';
   const canExplore = game.status === 'waiting' || game.status === 'knocking';
-
   const signOut = () => {
     game.restart();
     cabinGuests.resetGuests();
@@ -63,6 +62,10 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
     cabinGuests.addAllowedGuest(game.visitor, game.night, game.score);
     game.makeChoice('allow');
   };
+  const nextNight = () => {
+    cabinGuests.advanceNight(game.night + 1);
+    game.nextNight();
+  };
   useEffect(() => {
     const shouldShadow =
       game.status === 'waiting' &&
@@ -80,9 +83,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   if (autoStart && game.status === 'ready' && !introDone && !settings.skipIntro) {
     return <IntroSequence onComplete={finishIntro} settings={settings} />;
   }
-
   if (game.status === 'ready') return <GameReadyMenu onStart={game.startNight} />;
-
   return (
     <main className={`game-shell game-status-${game.status} ${windowShadow ? 'has-window-shadow' : ''} ${settings.screenShake ? '' : 'screen-shake-off'}`}>
       <div className={`play-area ${game.shaking && settings.screenShake ? 'is-shaking' : ''}`}>
@@ -140,7 +141,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
         ending={game.ending}
         finishedAllNights={game.finishedAllNights}
         night={game.night}
-        onNextNight={game.nextNight}
+        onNextNight={nextNight}
         onRestart={restartStory}
         status={game.status}
       />

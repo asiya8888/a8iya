@@ -1,5 +1,6 @@
 import type { QuestionKey } from './questions';
 import type { VisitorKind } from './visitors';
+import type { GameCharacter } from './characters/types';
 
 export type Personality = 'nervous' | 'rude' | 'frightened' | 'calm' | 'evasive';
 
@@ -68,6 +69,20 @@ const evasivePrefix = (text: string) => `${text}`;
 
 export function makeConversation(kind: VisitorKind, night: number) {
   return kind === 'skinwalker' ? mimicProfile(night) : humanProfile();
+}
+
+export function makeCharacterConversation(character: GameCharacter): ConversationProfile {
+  const known = character.knows?.length ? 'I know a few people who might come this way. That worries me more than it helps.' : humanProfile().alone;
+
+  return {
+    age: character.kind === 'skinwalker' ? 'old enough to knock' : humanProfile().age,
+    alone: known,
+    cold: character.kind === 'skinwalker' ? mimicProfile(4).cold : humanProfile().cold,
+    event: character.backstory,
+    origin: character.appearance,
+    outside: character.behaviors[0] ?? humanProfile().outside,
+    personality: character.kind === 'skinwalker' ? 'evasive' : 'calm',
+  };
 }
 
 export function answerQuestion(
