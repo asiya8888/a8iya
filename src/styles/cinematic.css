@@ -120,6 +120,19 @@
 
 @keyframes visitorReveal { from { filter: blur(8px); opacity: 0; } }
 @media (max-width: 760px) {
+  .living-room-screen .cabin-world { transform: translateX(-33.333%); }
+  .living-room-screen .window-frame {
+    height: min(28vh, 190px);
+    left: 4%;
+    top: 18vh;
+    width: 34%;
+  }
+  .living-room-screen .door-frame {
+    height: min(58vh, 380px);
+    left: 70%;
+    width: min(190px, 36vw);
+  }
+  .living-room-screen .fireplace { left: 47%; }
   .visitor-stage { grid-template-columns: 1fr; padding: 0; }
   .visitor-stage .portrait { height: 48vh; width: min(84vw, 430px); }
   .visitor-dialogue-box { border-width: 1px 0 0; max-height: 52vh; overflow-y: auto; padding: 18px; }
