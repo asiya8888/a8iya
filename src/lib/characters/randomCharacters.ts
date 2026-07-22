@@ -58,8 +58,20 @@ const seeds: RandomSeed[] = [
 export const randomCharacters: GameCharacter[] = seeds.map(([id, name, age, gender, kind, personality, backstory, arrival]) => ({
   id, name, age, gender, kind, personality, backstory, tier: 'random',
   appearance: `${age}-year-old ${name.toLowerCase()} in dark winter clothing`,
-  dialogue: [arrival, `I speak as a ${personality.split(',')[0]} person because the mountain punishes borrowed voices.`],
-  inspections: [`The details match the face and clothing of ${name.toLowerCase()}.`, `${gender === 'female' ? 'Her' : 'His'} hands carry marks of the trade.`],
+  dialogue: [[
+    'I lost the road when the snow came down. I have been walking toward your light for nearly an hour.',
+    'My phone died before dark. I thought I saw a light between the trees, so I kept coming this way.',
+    'The storm became worse than I expected. Something has been following me for a while now.',
+    'I left work late and the road was already gone. Yours is the first house I have found.',
+  ][id.split('').reduce((sum, letter) => sum + letter.charCodeAt(0), 0) % 4], arrival],
+  inspections: [[
+    'One sleeve is marked by a narrow line of dried blood.',
+    `${gender === 'female' ? 'Her' : 'His'} hands shake whenever the wind goes quiet.`,
+    'Snow remains packed into the shoulders of the coat.',
+    'The shadow behind the visitor falls at a slight angle.',
+    `${gender === 'female' ? 'She' : 'He'} keeps glancing past you into the cabin.`,
+    'The skin around the eyes looks raw from cold and exhaustion.',
+  ][id.length % 6], `${gender === 'female' ? 'Her' : 'His'} work-worn hands stay close to ${gender === 'female' ? 'her' : 'his'} coat.`],
   behaviors: [`Acts ${personality}.`, `Reacts to the cabin according to ${name.toLowerCase()}'s profession.`],
-  stayNights: [1, 3], portrait: `/portraits/random/${id}.png`, outcome: 'peaceful',
+  stayNights: [1, 3], portrait: `/portraits/cinematic/random/${id}.jpg`, outcome: 'peaceful',
 }));

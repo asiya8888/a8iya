@@ -22,6 +22,7 @@
 @import './styles/auth-form.css';
 @import './styles/responsive.css';
 @import './styles/responsive-mobile.css';
+@import './styles/cinematic.css';
 
 :root {
   color: #d6dce4;

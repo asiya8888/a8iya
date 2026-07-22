@@ -1,20 +1,15 @@
-import type { RoomId } from '../lib/rooms';
-
 type DoorPromptProps = {
-  currentRoom: RoomId;
   onLook: () => void;
 };
 
-export function DoorPrompt({ currentRoom, onLook }: DoorPromptProps) {
-  const atDoor = currentRoom === 'living';
-
+export function DoorPrompt({ onLook }: DoorPromptProps) {
   return (
     <section className="door-prompt">
       <p className="label">A knock at the door</p>
       <h2>Someone is outside.</h2>
-      <p>{atDoor ? 'The peephole waits in the dark.' : 'The sound comes from the living room.'}</p>
+      <p>Three slow knocks. Then silence.</p>
       <div className="choices door-choices">
-        {atDoor && <button onClick={onLook} type="button">Look Through Peephole</button>}
+        <button onClick={onLook} type="button">Look through the peephole</button>
       </div>
     </section>
   );

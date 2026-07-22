@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
+import { roomCenter } from '../lib/rooms';
+import { markGameCompleted, type GameSettings } from '../lib/settings';
+import { useCabinGame } from '../lib/useCabinGame';
+import { useCabinGuests } from '../lib/useCabinGuests';
 import { CabinScene } from './CabinScene';
+import { DoorPrompt } from './DoorPrompt';
 import { GameEndOverlays } from './GameEndOverlays';
 import { GameHud } from './GameHud';
 import { GameReadyMenu } from './GameReadyMenu';
-import { GameSidePanel } from './GameSidePanel';
 import { IntroSequence } from './IntroSequence';
-import { roomAtPosition, roomCenter } from '../lib/rooms';
-import { markGameCompleted, type GameSettings } from '../lib/settings';
-import { playDoorCreak } from '../lib/sounds';
-import { useCabinGame } from '../lib/useCabinGame';
-import { useCabinGuests } from '../lib/useCabinGuests';
+import { VisitorCard } from './VisitorCard';
 
 type GameScreenProps = {
   autoStart?: boolean;
@@ -22,42 +22,31 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
   const game = useCabinGame();
   const cabinGuests = useCabinGuests();
   const [introDone, setIntroDone] = useState(!autoStart || settings.skipIntro);
-  const [playerPosition, setPlayerPosition] = useState(roomCenter('living'));
-  const [windowShadow, setWindowShadow] = useState(false);
-  const lastShadowOutcome = useRef('');
-  const previousRoom = useRef(roomAtPosition(playerPosition));
-  const room = roomAtPosition(playerPosition);
-  const choiceLocked = game.status !== 'playing';
-  const canExplore = game.status === 'waiting' || game.status === 'knocking';
-  const signOut = () => {
-    game.restart();
-    cabinGuests.resetGuests();
-    setPlayerPosition(roomCenter('living'));
-    onSignOut();
-  };
-  const restartStory = () => {
-    setIntroDone(settings.skipIntro);
-    cabinGuests.resetGuests();
-    setPlayerPosition(roomCenter('living'));
-    game.restart();
-  };
-  const finishIntro = () => {
+  const [transitioning, setTransitioning] = useState(false);
+  const transitionTimer = useRef<number>();
+
+  const start = () => {
     setIntroDone(true);
-    setPlayerPosition(roomCenter('living'));
     game.startNight();
   };
-  useEffect(() => {
-    if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
-  }, [autoStart, game.status, introDone, settings.skipIntro]);
-  useEffect(() => {
-    if (!game.finishedAllNights || game.status !== 'won') return;
-    markGameCompleted();
-    onComplete();
-  }, [game.finishedAllNights, game.status, onComplete]);
-  useEffect(() => {
-    if (previousRoom.current !== room && canExplore) playDoorCreak();
-    previousRoom.current = room;
-  }, [canExplore, room]);
+  const restart = () => {
+    window.clearTimeout(transitionTimer.current);
+    setTransitioning(false);
+    setIntroDone(settings.skipIntro);
+    cabinGuests.resetGuests();
+    game.restart();
+  };
+  const signOut = () => {
+    restart();
+    onSignOut();
+  };
+  const lookThroughPeephole = () => {
+    setTransitioning(true);
+    transitionTimer.current = window.setTimeout(() => {
+      game.lookThroughPeephole();
+      setTransitioning(false);
+    }, 520);
+  };
   const allowVisitor = () => {
     cabinGuests.addAllowedGuest(game.visitor, game.night, game.score);
     game.makeChoice('allow');
@@ -66,84 +55,58 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
     cabinGuests.advanceNight(game.night + 1);
     game.nextNight();
   };
-  useEffect(() => {
-    const shouldShadow =
-      game.status === 'waiting' &&
-      game.visitor.kind === 'skinwalker' &&
-      game.outcome &&
-      lastShadowOutcome.current !== game.outcome &&
-      Math.random() > 0.55;
 
-    if (!shouldShadow) return undefined;
-    lastShadowOutcome.current = game.outcome;
-    setWindowShadow(true);
-    const timer = window.setTimeout(() => setWindowShadow(false), 2600);
-    return () => window.clearTimeout(timer);
-  }, [game.status, game.outcome, game.visitor.kind]);
+  useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
+  useEffect(() => {
+    if (autoStart && game.status === 'ready' && (introDone || settings.skipIntro)) game.startNight();
+  }, [autoStart, game.status, introDone, settings.skipIntro]);
+  useEffect(() => {
+    if (!game.finishedAllNights || game.status !== 'won') return;
+    markGameCompleted();
+    onComplete();
+  }, [game.finishedAllNights, game.status, onComplete]);
+
   if (autoStart && game.status === 'ready' && !introDone && !settings.skipIntro) {
-    return <IntroSequence onComplete={finishIntro} settings={settings} />;
+    return <IntroSequence onComplete={start} settings={settings} />;
   }
   if (game.status === 'ready') return <GameReadyMenu onStart={game.startNight} />;
+
+  const meetingVisitor = game.status === 'playing';
   return (
-    <main className={`game-shell game-status-${game.status} ${windowShadow ? 'has-window-shadow' : ''} ${settings.screenShake ? '' : 'screen-shake-off'}`}>
-      <div className={`play-area ${game.shaking && settings.screenShake ? 'is-shaking' : ''}`}>
-        <GameHud
-          diaryCount={game.diaryCount}
-          lives={game.lives}
-          score={game.score}
-          supplies={game.supplies}
-          night={game.night}
-          visitorNumber={game.visitorIndex}
-          totalVisitors={game.totalVisitors}
-          onRestart={game.restart}
-          onSignOut={signOut}
-        />
-        <p className="subtitle">{game.subtitle}</p>
-        <div className="game-layout">
+    <main className={`game-shell cinematic-game game-status-${game.status} ${transitioning ? 'peephole-transition' : ''}`}>
+      {!meetingVisitor && (
+        <div className={`living-room-screen ${game.shaking && settings.screenShake ? 'is-shaking' : ''}`}>
+          <GameHud
+            diaryCount={game.diaryCount} lives={game.lives} night={game.night}
+            onRestart={restart} onSignOut={signOut} score={game.score}
+            supplies={game.supplies} totalVisitors={game.totalVisitors}
+            visitorNumber={game.visitorIndex}
+          />
           <CabinScene
-            canMove={canExplore}
-            hasKnock={game.status === 'knocking'}
-            onLookThroughDoor={game.lookThroughPeephole}
-            onPlayerPositionChange={setPlayerPosition}
-            playerPosition={playerPosition}
-            guests={cabinGuests.guests}
-            room={room}
+            canMove={false} guests={[]} hasKnock={false}
+            onLookThroughDoor={lookThroughPeephole}
+            onPlayerPositionChange={() => undefined}
+            playerPosition={roomCenter('living')} room="living"
           />
-          <GameSidePanel
-            canAsk={game.canAsk}
-            canLook={game.canLook}
-            disabled={choiceLocked}
-            entries={game.entries}
-            guestMessage={cabinGuests.guestMessage}
-            guests={cabinGuests.guests}
-            onAllow={allowVisitor}
-            onAsk={game.askQuestion}
-            onCheckGuests={() => cabinGuests.checkGuests(game.score)}
-            onLook={game.lookCloser}
-            onPeephole={game.lookThroughPeephole}
-            onRefuse={() => game.makeChoice('refuse')}
-            onTalkGuest={cabinGuests.talkGuest}
-            outcome={game.outcome}
-            room={room}
-            settings={settings}
-            status={game.status}
-            visitor={game.visitor}
-          />
-        </div>
-      </div>
-      {game.status === 'jumpscare' && (
-        <div className="jumpscare" aria-label="Mimic jumpscare">
-          <span>Game Over</span>
+          {game.status === 'knocking' && <DoorPrompt onLook={lookThroughPeephole} />}
+          {game.status === 'waiting' && game.outcome && <p className="living-room-message">{game.outcome}</p>}
         </div>
       )}
+      {meetingVisitor && (
+        <VisitorCard
+          canAsk={game.canAsk} disabled={false} entries={game.entries}
+          onAllow={allowVisitor} onAsk={game.askQuestion}
+          onRefuse={() => game.makeChoice('refuse')}
+          outcome={game.outcome} questions={game.availableQuestions}
+          settings={settings} visitor={game.visitor}
+        />
+      )}
+      {transitioning && <div className="peephole-blackout" aria-hidden="true" />}
+      {game.status === 'jumpscare' && <div className="jumpscare"><span>Game Over</span></div>}
       <GameEndOverlays
-        delayedEnding={cabinGuests.delayedEnding}
-        ending={game.ending}
-        finishedAllNights={game.finishedAllNights}
-        night={game.night}
-        onNextNight={nextNight}
-        onRestart={restartStory}
-        status={game.status}
+        delayedEnding={cabinGuests.delayedEnding} ending={game.ending}
+        finishedAllNights={game.finishedAllNights} night={game.night}
+        onNextNight={nextNight} onRestart={restart} status={game.status}
       />
     </main>
   );

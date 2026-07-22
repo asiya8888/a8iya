@@ -3,6 +3,7 @@ import { InteractionLog } from './InteractionLog';
 import type { GameSettings } from '../lib/settings';
 import { TypewriterText } from './TypewriterText';
 import { VisitorFace } from './VisitorFace';
+import type { CharacterQuestion } from '../lib/questions';
 
 type VisitorCardProps = {
   visitor: Visitor;
@@ -10,10 +11,9 @@ type VisitorCardProps = {
   outcome?: string;
   disabled: boolean;
   canAsk: boolean;
-  canLook: boolean;
+  questions: CharacterQuestion[];
   settings: GameSettings;
-  onAsk: () => void;
-  onLook: () => void;
+  onAsk: (questionId: string) => void;
   onAllow: () => void;
   onRefuse: () => void;
 };
@@ -24,36 +24,31 @@ export function VisitorCard({
   outcome,
   disabled,
   canAsk,
-  canLook,
+  questions,
   settings,
   onAsk,
-  onLook,
   onAllow,
   onRefuse,
 }: VisitorCardProps) {
   return (
-    <section className="visitor-card" key={visitor.id}>
-      {visitor.face ? <VisitorFace face={visitor.face} portrait={visitor.portrait} /> : <div className="empty-porch">No one is there.</div>}
-      <div className="visitor-copy">
-        <p className="label">{visitor.groupSize > 1 ? 'Multiple visitors' : 'Someone is at the door'}</p>
-        <h2>{visitor.name}</h2>
-        {visitor.eventText && <p className="event-text">{visitor.eventText}</p>}
-        <TypewriterText className="quote" settings={settings} text={`"${visitor.dialogue[0]}"`} />
+    <section className="visitor-card visitor-stage" key={visitor.id}>
+      <div className="visitor-portrait-wrap">
+        {visitor.face ? <VisitorFace face={visitor.face} portrait={visitor.portrait} /> : <div className="empty-porch">No one is there.</div>}
+        <p className="visual-clue">{visitor.inspections[0]}</p>
       </div>
-      <InteractionLog entries={entries} outcome={outcome} settings={settings} />
-      <div className="choices">
-        <button data-click-sound="ask" disabled={disabled || !canAsk} onClick={onAsk}>
-          Ask Questions
-        </button>
-        <button data-click-sound="inspect" disabled={disabled || !canLook} onClick={onLook}>
-          Look Closer
-        </button>
-        <button data-click-sound="allow" disabled={disabled} onClick={onAllow}>
-          Open The Door
-        </button>
-        <button disabled={disabled} onClick={onRefuse}>
-          Keep The Door Closed
-        </button>
+      <div className="visitor-dialogue-box">
+        <p className="visitor-role">{visitor.name}</p>
+        <TypewriterText className="quote" settings={settings} text={visitor.dialogue[0]} />
+        <InteractionLog entries={entries} outcome={outcome} settings={settings} />
+        {questions.length > 0 && <div className="question-list">
+          {questions.map((question) => (
+            <button disabled={disabled || !canAsk} key={question.id} onClick={() => onAsk(question.id)} type="button">{question.text}</button>
+          ))}
+        </div>}
+        <div className="decision-row">
+          <button className="allow-button" disabled={disabled} onClick={onAllow}>Open the door</button>
+          <button className="refuse-button" disabled={disabled} onClick={onRefuse}>Keep it closed</button>
+        </div>
       </div>
     </section>
   );

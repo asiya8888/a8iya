@@ -11,24 +11,14 @@ type GameHudProps = {
 };
 
 export function GameHud({ diaryCount, lives, score, night, supplies, visitorNumber, totalVisitors, onRestart, onSignOut }: GameHudProps) {
-  const progress = Math.round(((visitorNumber - 1) / totalVisitors) * 100);
+  void diaryCount; void lives; void score; void supplies;
 
   return (
     <header className="hud">
-      <div>
-        <p className="label">WHITEOUT</p>
-        <h1>Night Watch</h1>
-      </div>
+      <p className="night-marker">Night {night} <span>•</span> Visitor {visitorNumber}/{totalVisitors}</p>
       <div className="stats">
-        <span>Lives {lives}/3</span>
-        <span>Supplies {supplies}</span>
-        <span>Diary {diaryCount}</span>
-        <span>Score {score}</span>
-        <span>Night {night}</span>
-        <span>Progress {progress}%</span>
-        <span>Visitor {visitorNumber}/{totalVisitors}</span>
-        <button onClick={onRestart}>Restart</button>
-        <button onClick={onSignOut}>Log Out</button>
+        <button onClick={onRestart}>Restart night</button>
+        <button onClick={onSignOut}>Exit</button>
       </div>
     </header>
   );

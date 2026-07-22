@@ -5,8 +5,7 @@ import { finalEnding } from './endings';
 import { encounterDelay, FINAL_NIGHT, gameSubtitle, QUESTIONS_PER_VISITOR, STARTING_LIVES, STARTING_SUPPLIES, TOTAL_VISITORS } from './gameConfig';
 import { playEventSound } from './eventSounds';
 import { resolveChoice } from './outcomes';
-import { questions, questionText, type QuestionKey } from './questions';
-import { takeRandom } from './random';
+import type { QuestionKey } from './questions';
 import { createVisitorRun, initialRunStats, makeRunVisitor } from './runVisitors';
 import { playJumpscare, playKnock, setMusicIntensity, startAmbience, stopAmbience } from './sounds';
 import type { GameStatus } from './gameTypes';
@@ -29,11 +28,9 @@ export function useCabinGame() {
   const [visitor, setVisitor] = useState<Visitor>(() => initialVisitor.current);
   const [entries, setEntries] = useState<string[]>([]);
   const [outcome, setOutcome] = useState('');
-  const [remainingQuestions, setRemainingQuestions] = useState<QuestionKey[]>(() => questions.map((question) => question.key));
+  const [remainingQuestions, setRemainingQuestions] = useState<QuestionKey[]>(() => initialVisitor.current.conversation?.map((question) => question.id) ?? []);
   const [questionsAsked, setQuestionsAsked] = useState(0);
   const [askedResponses, setAskedResponses] = useState<Partial<Record<QuestionKey, string>>>({});
-  const [remainingInspections, setRemainingInspections] = useState<string[]>(() => initialVisitor.current.inspections);
-  const [lookedThisVisitor, setLookedThisVisitor] = useState(false);
   const memories = useRef<VisitorMemory[]>([]);
   const nextKnockTimer = useRef<number>(), nextVisitorTimer = useRef<number>(), jumpscareTimer = useRef<number>();
 
@@ -41,8 +38,8 @@ export function useCabinGame() {
   const clearTimers = () => [nextKnockTimer, nextVisitorTimer, jumpscareTimer].forEach((timer) => window.clearTimeout(timer.current));
   const resetEncounter = (next: Visitor) => {
     setVisitor(next); setEntries([]); setOutcome('');
-    setRemainingQuestions(questions.map((question) => question.key)); setAskedResponses({});
-    setQuestionsAsked(0); setRemainingInspections(next.inspections); setLookedThisVisitor(false);
+    setRemainingQuestions(next.conversation?.map((question) => question.id) ?? []); setAskedResponses({});
+    setQuestionsAsked(0);
     setMusicIntensity(next.kind === 'skinwalker');
   };
   const triggerArrival = useCallback((eventSound?: Visitor['eventSound']) => {
@@ -103,29 +100,18 @@ export function useCabinGame() {
     setStatus('playing'); setMusicIntensity(visitor.kind === 'skinwalker');
   };
 
-  const askQuestion = () => {
+  const askQuestion = (key: QuestionKey) => {
     const profile = visitor.conversation;
     if (!profile || questionsAsked >= QUESTIONS_PER_VISITOR) return;
-    setRemainingQuestions((currentQuestions) => {
-      if (currentQuestions.length === 0) return currentQuestions;
-      const next = takeRandom(currentQuestions);
-      const repeated = Boolean(askedResponses[next.item]);
-      const answer = askedResponses[next.item] ?? answerQuestion(visitor.name, visitor.kind, profile, next.item, repeated);
-      setAskedResponses((current) => ({ ...current, [next.item]: answer }));
-      setQuestionsAsked((count) => count + 1);
-      setEntries((current) => [`${questionText(next.item)} ${answer}`, ...current].slice(0, 5));
-      return next.rest;
-    });
-  };
-  const lookCloser = () => {
-    if (lookedThisVisitor) return;
-    setRemainingInspections((currentClues) => {
-      if (currentClues.length === 0) return currentClues;
-      const next = takeRandom(currentClues);
-      setEntries((current) => [`Inspection: ${next.item}`, ...current].slice(0, 3));
-      setLookedThisVisitor(true);
-      return next.rest;
-    });
+    if (!remainingQuestions.includes(key)) return;
+    const question = profile.find((item) => item.id === key);
+    if (!question) return;
+    const repeated = Boolean(askedResponses[key]);
+    const answer = askedResponses[key] ?? answerQuestion(visitor.name, visitor.kind, profile, key, repeated);
+    setAskedResponses((current) => ({ ...current, [key]: answer }));
+    setQuestionsAsked((count) => count + 1);
+    setEntries((current) => [`${question.text} — ${answer}`, ...current].slice(0, 3));
+    setRemainingQuestions((current) => current.filter((item) => item !== key));
   };
   const startNight = () => {
     setStatus('waiting'); startAmbience(); setMusicIntensity(false);
@@ -144,7 +130,8 @@ export function useCabinGame() {
     ending: finalEnding({ diaryCount, helped, refused, supplies }),
     totalVisitors: TOTAL_VISITORS,
     finishedAllNights: status === 'won' && night >= FINAL_NIGHT,
-    canAsk: remainingQuestions.length > 0 && questionsAsked < QUESTIONS_PER_VISITOR, canLook: remainingInspections.length > 0 && !lookedThisVisitor,
-    askQuestion, lookCloser, lookThroughPeephole, makeChoice, nextNight, restart, startNight,
+    availableQuestions: visitor.conversation?.filter((question) => remainingQuestions.includes(question.id)) ?? [],
+    canAsk: remainingQuestions.length > 0 && questionsAsked < QUESTIONS_PER_VISITOR,
+    askQuestion, lookThroughPeephole, makeChoice, nextNight, restart, startNight,
   };
 }

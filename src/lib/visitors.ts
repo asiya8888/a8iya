@@ -1,7 +1,8 @@
 import type { GameCharacter } from './characters/types';
 import type { ConversationProfile } from './conversations';
-import { makeCharacterConversation } from './conversations';
-import { memoryLine, type VisitorMemory } from './visitorMemory';
+import type { VisitorMemory } from './visitorMemory';
+import { questionsFor } from './questions';
+import { arrivalDialogue } from './arrivalDialogue';
 
 export type VisitorKind = 'human' | 'skinwalker' | 'empty';
 export type MoralOutcome = 'peaceful' | 'steal' | 'injure';
@@ -67,10 +68,8 @@ const makeFace = (character: GameCharacter, night: number): FaceFeature => {
 };
 
 export const makeVisitor = (id: number, night: number, character: GameCharacter, memories: VisitorMemory[] = []): Visitor => {
-  const memory = memories.length > 0 && Math.random() > 0.82 ? pick(memories) : undefined;
+  void memories;
   const eventSound = Math.random() > 0.68 ? pick(specialEvents) : undefined;
-  const remembered = memoryLine(memory);
-  const dialogue = remembered ? `${remembered} ${character.dialogue[0]}` : character.dialogue[0];
 
   return {
     id,
@@ -79,8 +78,8 @@ export const makeVisitor = (id: number, night: number, character: GameCharacter,
     groupSize: character.id === 'twin-sisters' ? 2 : 1,
     eventSound,
     outcome: character.outcome ?? 'peaceful',
-    conversation: makeCharacterConversation(character, night, memories),
-    dialogue: [dialogue, ...character.dialogue.slice(1)],
+    conversation: questionsFor(character),
+    dialogue: [arrivalDialogue(character), ...character.dialogue.slice(1)],
     inspections: [character.appearance, ...character.inspections, ...character.behaviors],
     face: makeFace(character, night),
     character,
