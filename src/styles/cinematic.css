@@ -54,7 +54,7 @@
 .visitor-stage {
   align-items: end;
   animation: visitorReveal .8s ease both;
-  background: linear-gradient(180deg, #0002 25%, #020304 100%), url('/backgrounds/visitor-snow.jpg') center/cover;
+  background: #000;
   border: 0;
   box-shadow: none;
   display: grid;
@@ -65,23 +65,20 @@
   position: relative;
 }
 
-.visitor-stage::after { background: radial-gradient(ellipse at 38% 36%, transparent 8%, #000c 75%); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 1; }
+.visitor-stage::after { background: radial-gradient(ellipse at 38% 40%, transparent 18%, #000b 78%); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 1; }
 .visitor-portrait-wrap { align-self: stretch; display: grid; min-height: 0; place-items: center; position: relative; z-index: 2; }
-.visitor-stage .portrait { background: transparent; border: 0; box-shadow: none; height: min(90vh, 920px); overflow: hidden; width: min(48vw, 660px); }
+.visitor-stage .portrait { background: transparent; border: 0; box-shadow: none; height: min(78vh, 800px); overflow: hidden; width: min(43vw, 590px); }
 .visitor-stage .portrait--photo img {
   filter: brightness(.72) contrast(1.14) saturate(.68) sepia(.07);
   height: 100%;
   mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
-  object-fit: cover;
-  object-position: center top;
+  object-fit: contain;
+  object-position: center center;
   width: 100%;
 }
-.visitor-stage .portrait--random img { transform: scale(1.07) translateY(-2.5%); }
-.visitor-stage .portrait--main img { transform: scale(1.04); }
-.visitor-stage .portrait--group img {
-  object-fit: contain;
-  transform: scale(1.28) translate(-6%, -2%);
-}
+.visitor-stage .portrait--random img,
+.visitor-stage .portrait--main img,
+.visitor-stage .portrait--group img { transform: none; }
 .visitor-stage .portrait::after { background: linear-gradient(90deg, #0008, transparent 35% 65%, #0008); }
 .visual-clue { bottom: 2vh; color: #928e87; font-family: "Cormorant Garamond", serif; font-size: 1rem; font-style: italic; left: 50%; letter-spacing: .02em; position: absolute; text-align: center; text-shadow: 0 2px 12px #000; transform: translateX(-50%); width: 80%; z-index: 4; }
 
@@ -124,7 +121,7 @@
 @keyframes visitorReveal { from { filter: blur(8px); opacity: 0; } }
 @media (max-width: 760px) {
   .visitor-stage { grid-template-columns: 1fr; padding: 0; }
-  .visitor-stage .portrait { height: 54vh; width: min(92vw, 480px); }
+  .visitor-stage .portrait { height: 48vh; width: min(84vw, 430px); }
   .visitor-dialogue-box { border-width: 1px 0 0; max-height: 52vh; overflow-y: auto; padding: 18px; }
   .visual-clue { bottom: 1vh; }
   .decision-row { grid-template-columns: 1fr; }
