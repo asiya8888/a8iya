@@ -1,12 +1,23 @@
 import type { FaceFeature } from '../lib/visitors';
 
 type VisitorFaceProps = {
+  characterId?: string;
   face: FaceFeature;
   portrait?: string;
 };
 
-export function VisitorFace({ face, portrait }: VisitorFaceProps) {
-  if (portrait) return <div className="portrait portrait--photo"><img alt="Visitor portrait" src={portrait} /></div>;
+export function VisitorFace({ characterId, face, portrait }: VisitorFaceProps) {
+  if (portrait) {
+    const portraitType = characterId === 'twin-sisters'
+      ? 'portrait--group'
+      : portrait.includes('/random/') ? 'portrait--random' : 'portrait--main';
+
+    return (
+      <div className={`portrait portrait--photo ${portraitType}`}>
+        <img alt="Visitor portrait" src={portrait} />
+      </div>
+    );
+  }
   const eyes = face.eyes === 'three' ? [0, 1, 2] : [0, 1];
 
   return (

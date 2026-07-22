@@ -33,11 +33,11 @@ export function VisitorCard({
   return (
     <section className="visitor-card visitor-stage" key={visitor.id}>
       <div className="visitor-portrait-wrap">
-        {visitor.face ? <VisitorFace face={visitor.face} portrait={visitor.portrait} /> : <div className="empty-porch">No one is there.</div>}
+        {visitor.face ? <VisitorFace characterId={visitor.character?.id} face={visitor.face} portrait={visitor.portrait} /> : <div className="empty-porch">No one is there.</div>}
         <p className="visual-clue">{visitor.inspections[1] ?? visitor.inspections[0]}</p>
       </div>
       <div className="visitor-dialogue-box">
-        <p className="visitor-role">A voice beyond the door</p>
+        <p className="visitor-role">{visitor.name}</p>
         <TypewriterText className="quote" settings={settings} text={visitor.dialogue[0]} />
         <InteractionLog entries={entries} outcome={outcome} settings={settings} />
         {questions.length > 0 && <div className="question-list">

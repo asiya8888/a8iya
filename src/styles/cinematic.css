@@ -72,9 +72,15 @@
   filter: brightness(.72) contrast(1.14) saturate(.68) sepia(.07);
   height: 100%;
   mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
-  object-fit: contain;
-  object-position: center center;
+  object-fit: cover;
+  object-position: center top;
   width: 100%;
+}
+.visitor-stage .portrait--random img { transform: scale(1.07) translateY(-2.5%); }
+.visitor-stage .portrait--main img { transform: scale(1.04); }
+.visitor-stage .portrait--group img {
+  object-fit: contain;
+  transform: scale(1.28) translate(-6%, -2%);
 }
 .visitor-stage .portrait::after { background: linear-gradient(90deg, #0008, transparent 35% 65%, #0008); }
 .visual-clue { bottom: 2vh; color: #928e87; font-family: "Cormorant Garamond", serif; font-size: 1rem; font-style: italic; left: 50%; letter-spacing: .02em; position: absolute; text-align: center; text-shadow: 0 2px 12px #000; transform: translateX(-50%); width: 80%; z-index: 4; }
