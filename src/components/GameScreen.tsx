@@ -106,7 +106,7 @@ export function GameScreen({ autoStart = false, onComplete, onSignOut, settings 
             onLookThroughDoor={game.lookThroughPeephole}
             onPlayerPositionChange={setPlayerPosition}
             playerPosition={playerPosition}
-            guestNames={cabinGuests.guests.map((guest) => guest.name)}
+            guests={cabinGuests.guests}
             room={room}
           />
           <GameSidePanel

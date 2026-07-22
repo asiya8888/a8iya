@@ -29,6 +29,7 @@ export function useCabinGuests() {
         leaveAfterNight: Math.min(7, night + stay - 1),
         name: visitor.name,
         personality: character.personality,
+        portrait: character.portrait,
         talks: 0,
       },
     ]);

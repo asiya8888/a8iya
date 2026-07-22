@@ -1,21 +1,22 @@
 import { snowStyle } from '../../lib/snow';
 import { SceneHotspot } from './SceneHotspot';
+import type { CabinGuest } from '../../lib/guests';
 
 type LivingRoomSceneProps = {
-  guestNames: string[];
+  guests: CabinGuest[];
   hasKnock: boolean;
   onLookThroughDoor: () => void;
 };
 
 const initials = (name: string) => name.split(' ').map((part) => part[0]).join('').slice(0, 2);
 
-export function LivingRoomScene({ guestNames, hasKnock, onLookThroughDoor }: LivingRoomSceneProps) {
-  const visibleGuests = guestNames.slice(0, 3);
+export function LivingRoomScene({ guests, hasKnock, onLookThroughDoor }: LivingRoomSceneProps) {
+  const visibleGuests = guests.slice(0, 3);
 
   return (
     <>
       <p className="room-title">Living Room</p>
-      {guestNames.length > 0 && <p className="room-guest-count">Guests: {guestNames.length}</p>}
+      {guests.length > 0 && <p className="room-guest-count">Guests: {guests.length}</p>}
       <div className="window-frame">
         <div className="window">
           {Array.from({ length: 36 }, (_, index) => <span className="snowflake" key={index} style={snowStyle(index)} />)}
@@ -33,13 +34,15 @@ export function LivingRoomScene({ guestNames, hasKnock, onLookThroughDoor }: Liv
         <span className="sofa-seat" />
       </div>
       <div className="seated-guests" aria-hidden="true">
-        {visibleGuests.map((name) => (
-          <span className="seated-guest" key={name}>
-            <b>{initials(name)}</b>
+        {visibleGuests.map((guest) => (
+          <span className={`seated-guest ${guest.portrait ? 'seated-guest--photo' : ''}`} key={guest.id}>
+            {guest.portrait
+              ? <img alt={guest.name} src={guest.portrait} />
+              : <b>{initials(guest.name)}</b>}
           </span>
         ))}
       </div>
-      {visibleGuests.length > 0 && <p className="guest-name-tag">{visibleGuests.map((name) => name.split(' ')[0]).join(', ')}</p>}
+      {visibleGuests.length > 0 && <p className="guest-name-tag">{visibleGuests.map((guest) => guest.name.split(' ')[0]).join(', ')}</p>}
       <div className="coat-rack" aria-hidden="true" />
       <div className="door-frame">
         <div className="door">

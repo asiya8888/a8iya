@@ -11,6 +11,7 @@ export type CabinGuest = {
   leaveAfterNight: number;
   name: string;
   personality: string;
+  portrait?: string;
   talks: number;
 };
 
