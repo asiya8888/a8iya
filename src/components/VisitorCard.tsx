@@ -42,13 +42,13 @@ export function VisitorCard({
       </div>
       <InteractionLog entries={entries} outcome={outcome} settings={settings} />
       <div className="choices">
-        <button disabled={disabled || !canAsk} onClick={onAsk}>
+        <button data-click-sound="ask" disabled={disabled || !canAsk} onClick={onAsk}>
           Ask Questions
         </button>
-        <button disabled={disabled || !canLook} onClick={onLook}>
+        <button data-click-sound="inspect" disabled={disabled || !canLook} onClick={onLook}>
           Look Closer
         </button>
-        <button disabled={disabled} onClick={onAllow}>
+        <button data-click-sound="allow" disabled={disabled} onClick={onAllow}>
           Open The Door
         </button>
         <button disabled={disabled} onClick={onRefuse}>

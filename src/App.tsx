@@ -7,7 +7,7 @@ import { SettingsPanel } from './components/SettingsPanel';
 import { clearAuthCallbackUrl, readAuthErrorFromUrl } from './lib/auth';
 import { hasCompletedGame, readSettings, saveSettings, type GameSettings } from './lib/settings';
 import { snowStyle } from './lib/snow';
-import { setMasterVolume, startAmbience } from './lib/sounds';
+import { playButtonSound, setMasterVolume, startAmbience, type ButtonSound } from './lib/sounds';
 import { supabase } from './lib/supabase';
 
 type MenuPanel = 'auth' | 'diary' | 'settings' | null;
@@ -48,6 +48,18 @@ function App() {
     saveSettings(settings);
     setMasterVolume(settings.musicVolume / 100);
   }, [settings]);
+
+  useEffect(() => {
+    const playClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+      const button = event.target.closest<HTMLButtonElement>('button');
+      if (!button || button.disabled) return;
+      playButtonSound(button.dataset.clickSound as ButtonSound | undefined);
+    };
+
+    document.addEventListener('click', playClick);
+    return () => document.removeEventListener('click', playClick);
+  }, []);
 
   const signOut = () => {
     setShowGame(false);
