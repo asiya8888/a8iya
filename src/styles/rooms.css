@@ -25,7 +25,7 @@
 }
 .scene-hotspot:hover:not(:disabled),
 .scene-hotspot:focus-visible {
-  border-color: #8d101b;
+  border-color: #416f99;
   transform: translateY(-2px);
 }
 .scene-hotspot:disabled {

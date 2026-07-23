@@ -64,7 +64,7 @@
 
 .title-menu button:hover,
 .title-menu button:focus-visible {
-  color: #b81422;
+  color: #5f91bf;
   transform: translateX(5px);
 }
 
@@ -116,7 +116,7 @@
 }
 
 .settings-panel button:disabled { color: #6f7b8a; }
-.settings-panel .is-selected { border-color: #8d101b; color: #edf2f7; }
+.settings-panel .is-selected { border-color: #416f99; color: #edf2f7; }
 
 @media (max-width: 760px) {
   .login-shell { grid-template-columns: 1fr; }
