@@ -1,5 +1,5 @@
 .hearth-stone {
-  background: repeating-linear-gradient(0deg, #8a715c 0 27px, #3e3027 28px 32px);
+  background: repeating-linear-gradient(0deg, #302821 0 27px, #100c0a 28px 32px);
   bottom: 26px;
   height: 158px;
   position: absolute;
@@ -20,7 +20,7 @@
 }
 .living-room-screen .fire-left,
 .living-room-screen .fire-right { display: none; }
-.living-room-screen .fire-center { height: 94px; left: 46px; width: 56px; }
+.living-room-screen .fire-center { height: 90px; left: 36px; width: 76px; }
 .living-room-screen .ember-bed { bottom: 14px; left: 17px; width: 102px; }
 
 .fire-log {

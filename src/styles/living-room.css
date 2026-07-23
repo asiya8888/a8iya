@@ -45,9 +45,9 @@
 }
 
 .living-room-screen .window-frame {
-  background: linear-gradient(90deg, #120905, #5a341d 48%, #120905);
-  border: 9px solid #1b0e08;
-  box-shadow: 0 14px 30px #000a, 0 0 34px #83bce329;
+  background: linear-gradient(90deg, #030201, #1d1009 48%, #030201);
+  border: 9px solid #060302;
+  box-shadow: 0 14px 34px #000e, 0 0 20px #52758a12;
   height: min(36vh, 270px);
   left: 7%;
   top: 14vh;
@@ -65,7 +65,7 @@
 
 .living-room-screen .window::before,
 .living-room-screen .window::after {
-  background: linear-gradient(90deg, #1b0e08, #60391f, #1b0e08);
+  background: linear-gradient(90deg, #050302, #211209, #050302);
   box-shadow: 0 0 7px #000;
   content: "";
   position: absolute;
@@ -76,15 +76,15 @@
 .living-room-screen .window::after { height: 10px; left: 0; top: calc(50% - 5px); width: 100%; }
 
 .living-room-screen .window-sill {
-  background: linear-gradient(#704526, #251208);
+  background: linear-gradient(#211209, #050302);
   bottom: -20px;
   height: 20px;
 }
 
 .living-room-screen .fireplace {
   background:
-    repeating-linear-gradient(0deg, transparent 0 31px, #28170f 32px 35px),
-    repeating-linear-gradient(90deg, #765c48 0 52px, #3b2d25 53px 57px);
+    repeating-linear-gradient(0deg, transparent 0 31px, #0d0907 32px 35px),
+    repeating-linear-gradient(90deg, #2c241f 0 52px, #100c0a 53px 57px);
   border: 0;
   bottom: 12vh;
   box-shadow: 0 24px 36px #000b, 0 0 70px #e26d2633;
@@ -98,7 +98,7 @@
 .living-room-screen .fireplace::before { display: none; }
 
 .living-room-screen .mantel {
-  background: linear-gradient(#825532, #3a1d0d 58%, #170a04);
+  background: linear-gradient(#28170d, #100804 58%, #040201);
   border-radius: 3px;
   box-shadow: 0 9px 14px #000b;
   height: 28px;
@@ -122,7 +122,7 @@
 }
 
 .hearth-base {
-  background: linear-gradient(#75604f, #30231b);
+  background: linear-gradient(#2a231e, #0c0907);
   bottom: -13px;
   box-shadow: 0 12px 18px #0009;
   height: 27px;
